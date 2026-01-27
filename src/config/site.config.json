@@ -1,0 +1,129 @@
+{
+  "profile": {
+    "name": "你的名字",
+    "avatar": "https://avatars.githubusercontent.com/u/0?v=4",
+    "bio": "一句话介绍自己",
+    "description": "这里是详细的个人简介，可以写多行内容。介绍你的技能、兴趣爱好、工作经历等。",
+    "socialLinks": {
+      "github": "https://github.com/yourusername",
+      "twitter": "",
+      "email": "your@email.com",
+      "weibo": "",
+      "zhihu": ""
+    }
+  },
+  "friendLinks": [
+    {
+      "name": "友链1",
+      "url": "https://example.com",
+      "avatar": "https://avatars.githubusercontent.com/u/1?v=4",
+      "description": "这是一个友链描述"
+    },
+    {
+      "name": "友链2",
+      "url": "https://example2.com",
+      "avatar": "https://avatars.githubusercontent.com/u/2?v=4",
+      "description": "另一个友链描述"
+    },
+    {
+      "name": "友链3",
+      "url": "https://example3.com",
+      "avatar": "https://avatars.githubusercontent.com/u/3?v=4",
+      "description": "第三个友链"
+    }
+  ],
+  "footer": {
+    "icpBeian": "京ICP备XXXXXXXX号",
+    "gonganBeian": "京公网安备XXXXXXXXXXX号",
+    "gonganBeianCode": "XXXXXXXXXXX",
+    "copyright": "你的名字",
+    "startYear": 2024
+  },
+  "themes": [
+    {
+      "name": "浅色",
+      "key": "light",
+      "leftBg": "#e2e8f0",
+      "centerBg": "#f1f5f9",
+      "rightBg": "#f1f5f9",
+      "primaryColor": "#3b82f6",
+      "backgroundColor": "#f8fafc",
+      "textColor": "#1e293b",
+      "cardBackground": "#ffffff",
+      "accentColor": "#6366f1"
+    },
+    {
+      "name": "深色",
+      "key": "dark",
+      "leftBg": "#0f172a",
+      "centerBg": "#1e293b",
+      "rightBg": "#0f172a",
+      "primaryColor": "#60a5fa",
+      "backgroundColor": "#0f172a",
+      "textColor": "#f1f5f9",
+      "cardBackground": "#1e293b",
+      "accentColor": "#818cf8"
+    },
+    {
+      "name": "海洋",
+      "key": "ocean",
+      "leftBg": "#0c4a6e",
+      "centerBg": "#0369a1",
+      "rightBg": "#075985",
+      "primaryColor": "#06b6d4",
+      "backgroundColor": "#0c4a6e",
+      "textColor": "#e0f2fe",
+      "cardBackground": "#075985",
+      "accentColor": "#22d3ee"
+    },
+    {
+      "name": "森林",
+      "key": "forest",
+      "leftBg": "#14532d",
+      "centerBg": "#166534",
+      "rightBg": "#15803d",
+      "primaryColor": "#22c55e",
+      "backgroundColor": "#14532d",
+      "textColor": "#dcfce7",
+      "cardBackground": "#166534",
+      "accentColor": "#4ade80"
+    },
+    {
+      "name": "紫罗兰",
+      "key": "purple",
+      "leftBg": "#3b0764",
+      "centerBg": "#581c87",
+      "rightBg": "#4c1d95",
+      "primaryColor": "#a855f7",
+      "backgroundColor": "#3b0764",
+      "textColor": "#f3e8ff",
+      "cardBackground": "#581c87",
+      "accentColor": "#c084fc"
+    },
+    {
+      "name": "暖阳",
+      "key": "warm",
+      "leftBg": "#fef3c7",
+      "centerBg": "#fffbeb",
+      "rightBg": "#fef9c3",
+      "primaryColor": "#f59e0b",
+      "backgroundColor": "#fffbeb",
+      "textColor": "#78350f",
+      "cardBackground": "#fde68a",
+      "accentColor": "#f97316"
+    },
+    {
+      "name": "自定义背景",
+      "key": "custom",
+      "leftBg": "rgba(255, 255, 255, 0.15)",
+      "centerBg": "rgba(255, 255, 255, 0.25)",
+      "rightBg": "rgba(255, 255, 255, 0.15)",
+      "primaryColor": "#3b82f6",
+      "backgroundColor": "#f8fafc",
+      "textColor": "#1e293b",
+      "cardBackground": "rgba(255, 255, 255, 0.35)",
+      "accentColor": "#6366f1",
+      "customBackground": true
+    }
+  ]
+}
