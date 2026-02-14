@@ -37,7 +37,8 @@
     "gonganBeian": "京公网安备XXXXXXXXXXX号",
     "gonganBeianCode": "XXXXXXXXXXX",
     "copyright": "你的名字",
-    "startYear": 2024
+    "startYear": 2024,
+    "siteStartDate": "2024-01-01"
   },
   "themes": [
     {

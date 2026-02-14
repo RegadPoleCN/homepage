@@ -40,6 +40,7 @@ export interface SiteConfig {
     gonganBeianCode: string
     copyright: string
     startYear: number
+    siteStartDate: string
   }
   themes: ThemePreset[]
 }

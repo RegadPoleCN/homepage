@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { useTheme } from '../composables/useTheme'
+import { useThemeStore } from '../stores/theme'
+import { storeToRefs } from 'pinia'
 
 defineProps<{
   visible: boolean
@@ -10,7 +11,9 @@ const emit = defineEmits<{
   close: []
 }>()
 
-const { themes, currentThemeKey, customBackgroundUrl, isCustomTheme, setTheme, setCustomBackground } = useTheme()
+const themeStore = useThemeStore()
+const { themes, currentThemeKey, customBackgroundUrl, isCustomTheme } = storeToRefs(themeStore)
+const { setTheme, setCustomBackground } = themeStore
 
 const handleThemeSelect = (themeKey: string) => {
   setTheme(themeKey)
