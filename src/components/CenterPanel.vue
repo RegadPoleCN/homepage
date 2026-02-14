@@ -1,8 +1,22 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { Icon } from '@iconify/vue'
 import { siteConfig } from '../config/site.config'
+import { useSiteStats } from '../composables/useSiteStats'
 
 const profile = siteConfig.profile
+const { pageViews, runtime } = useSiteStats()
+
+const socialLinks = computed(() => {
+  const links = [
+    { key: 'github', icon: 'mdi:github', title: 'GitHub', url: profile.socialLinks.github },
+    { key: 'twitter', icon: 'mdi:twitter', title: 'Twitter', url: profile.socialLinks.twitter },
+    { key: 'email', icon: 'mdi:email', title: 'Email', url: profile.socialLinks.email ? `mailto:${profile.socialLinks.email}` : '' },
+    { key: 'weibo', icon: 'mdi:sina-weibo', title: '微博', url: profile.socialLinks.weibo },
+    { key: 'zhihu', icon: 'simple-icons:zhihu', title: '知乎', url: profile.socialLinks.zhihu },
+  ]
+  return links.filter(link => link.url)
+})
 </script>
 
 <template>
@@ -15,52 +29,15 @@ const profile = siteConfig.profile
       <p class="bio">{{ profile.bio }}</p>
       <div class="social-links">
         <a
-          v-if="profile.socialLinks.github"
-          :href="profile.socialLinks.github"
-          target="_blank"
+          v-for="link in socialLinks"
+          :key="link.key"
+          :href="link.url"
+          :target="link.key === 'email' ? '_self' : '_blank'"
           rel="noopener noreferrer"
           class="social-link"
-          title="GitHub"
+          :title="link.title"
         >
-          <Icon icon="mdi:github" />
-        </a>
-        <a
-          v-if="profile.socialLinks.twitter"
-          :href="profile.socialLinks.twitter"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="social-link"
-          title="Twitter"
-        >
-          <Icon icon="mdi:twitter" />
-        </a>
-        <a
-          v-if="profile.socialLinks.email"
-          :href="`mailto:${profile.socialLinks.email}`"
-          class="social-link"
-          title="Email"
-        >
-          <Icon icon="mdi:email" />
-        </a>
-        <a
-          v-if="profile.socialLinks.weibo"
-          :href="profile.socialLinks.weibo"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="social-link"
-          title="微博"
-        >
-          <Icon icon="mdi:sina-weibo" />
-        </a>
-        <a
-          v-if="profile.socialLinks.zhihu"
-          :href="profile.socialLinks.zhihu"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="social-link"
-          title="知乎"
-        >
-          <Icon icon="simple-icons:zhihu" />
+          <Icon :icon="link.icon" />
         </a>
       </div>
     </div>
@@ -70,6 +47,19 @@ const profile = siteConfig.profile
         关于我
       </h2>
       <p class="description">{{ profile.description }}</p>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-item">
+        <Icon icon="mdi:eye" class="stats-icon" />
+        <span class="stats-label">全站访问量</span>
+        <span class="stats-value">{{ pageViews }}</span>
+      </div>
+      <div class="stats-item">
+        <Icon icon="mdi:clock-outline" class="stats-icon" />
+        <span class="stats-label">已稳定运行</span>
+        <span class="stats-value">{{ runtime }}</span>
+      </div>
     </div>
   </section>
 </template>
@@ -187,5 +177,48 @@ const profile = siteConfig.profile
   line-height: 1.6;
   color: var(--text-color);
   opacity: 0.85;
+}
+
+.stats-card {
+  margin-top: auto;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+:global([data-theme="light"]) .stats-card,
+:global([data-theme="warm"]) .stats-card {
+  background: var(--card-background);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.stats-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.stats-icon {
+  color: var(--primary-color);
+  font-size: 1.125rem;
+}
+
+.stats-label {
+  color: var(--text-color);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.stats-value {
+  color: var(--text-color);
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  font-size: 0.75rem;
 }
 </style>

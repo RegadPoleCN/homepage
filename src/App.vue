@@ -1,64 +1,24 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { Icon } from '@iconify/vue'
+import { useWindowScroll } from '@vueuse/core'
 import LeftSidebar from './components/LeftSidebar.vue'
 import CenterPanel from './components/CenterPanel.vue'
 import RightPanel from './components/RightPanel.vue'
 import Footer from './components/Footer.vue'
 import SettingsModal from './components/SettingsModal.vue'
-import { useTheme } from './composables/useTheme'
+import { useThemeStore } from './stores/theme'
+import { useScrollToTop } from './composables/useScrollToTop'
 
-const { initTheme } = useTheme()
+const themeStore = useThemeStore()
+const { y } = useWindowScroll()
+const { isLaunching, scrollToTop } = useScrollToTop()
 
 const showSettings = ref(false)
-const showBackToTop = ref(false)
-const isLaunching = ref(false)
-
-const handleScroll = () => {
-  showBackToTop.value = window.scrollY > 500
-}
-
-// Custom smooth scroll algorithm: easeInOutQuart
-const easeInOutQuart = (t: number): number => {
-  return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2
-}
-
-const scrollToTop = () => {
-  if (isLaunching.value || window.scrollY === 0) return
-  isLaunching.value = true
-
-  const startPosition = window.scrollY
-  const duration = 1000 // 1s for ultra smooth experience
-  let startTime: number | null = null
-
-  const animation = (currentTime: number) => {
-    if (startTime === null) startTime = currentTime
-    const timeElapsed = currentTime - startTime
-    const progress = Math.min(timeElapsed / duration, 1)
-    const ease = easeInOutQuart(progress)
-    
-    window.scrollTo(0, startPosition * (1 - ease))
-
-    if (timeElapsed < duration) {
-      requestAnimationFrame(animation)
-    } else {
-      // Reset launch state after a delay to allow rocket to reset its position
-      setTimeout(() => {
-        isLaunching.value = false
-      }, 600)
-    }
-  }
-
-  requestAnimationFrame(animation)
-}
+const showBackToTop = computed(() => y.value > 500)
 
 onMounted(() => {
-  initTheme()
-  window.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
+  themeStore.initTheme()
 })
 </script>
 
