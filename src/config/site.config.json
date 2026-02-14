@@ -126,5 +126,9 @@
       "accentColor": "#6366f1",
       "customBackground": true
     }
-  ]
+  ],
+  "uptimeKuma": {
+    "url": "https://status.example.com",
+    "slug": "index"
+  }
 }

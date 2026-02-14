@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
+import UptimeCard from './UptimeCard.vue'
+import { siteConfig } from '../config/site.config'
 </script>
 
 <template>
   <section class="right-panel">
+    <!-- Uptime Kuma Card (Conditional) -->
+    <UptimeCard v-if="siteConfig.uptimeKuma" />
+
     <div class="content-card">
       <div class="card-header">
         <Icon icon="mdi:post-outline" class="header-icon" />

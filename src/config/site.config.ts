@@ -43,6 +43,10 @@ export interface SiteConfig {
     siteStartDate: string
   }
   themes: ThemePreset[]
+  uptimeKuma?: {
+    url: string
+    slug: string
+  }
 }
 
 import siteConfigJson from './site.config.json'
