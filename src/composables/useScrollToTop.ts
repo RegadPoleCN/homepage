@@ -10,7 +10,8 @@ const easeInOutQuart = (t: number): number => {
 export function useScrollToTop() {
   const isLaunching = ref(false)
 
-  const scrollToTop = (duration = 1000) => {
+  const scrollToTop = (event?: PointerEvent) => {
+    const duration = 1000
     if (isLaunching.value || window.scrollY === 0) return
     isLaunching.value = true
 
