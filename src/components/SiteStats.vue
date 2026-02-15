@@ -2,15 +2,15 @@
 import { Icon } from '@iconify/vue'
 import { useSiteStats } from '../composables/useSiteStats'
 
-const { pageViews, runtime } = useSiteStats()
+const { runtime } = useSiteStats()
 </script>
 
 <template>
   <div class="stats-card">
-    <div class="stats-item">
+    <div id="busuanzi_container_site_pv" class="stats-item">
       <Icon icon="mdi:eye" class="stats-icon" />
       <span class="stats-label">全站访问量</span>
-      <span class="stats-value">{{ pageViews }}</span>
+      <span id="busuanzi_site_pv" class="stats-value">--</span>
     </div>
     <div class="stats-item">
       <Icon icon="mdi:clock-outline" class="stats-icon" />
