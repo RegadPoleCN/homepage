@@ -24,7 +24,7 @@ export interface SiteConfig {
     name: string
     avatar: string
     bio: string
-    description: string
+    description: string | string[]
     socialLinks: {
       github?: string
       twitter?: string

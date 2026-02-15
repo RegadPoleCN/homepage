@@ -45,7 +45,16 @@ const socialLinks = computed(() => {
         <Icon icon="mdi:account-details" class="section-icon" />
         关于我
       </h2>
-      <p class="description">{{ profile.description }}</p>
+      <div class="description">
+        <template v-if="Array.isArray(profile.description)">
+          <p v-for="(line, index) in profile.description" :key="index" class="description-line">
+            {{ line }}
+          </p>
+        </template>
+        <template v-else>
+          {{ profile.description }}
+        </template>
+      </div>
     </div>
 
     <SiteStats class="desktop-stats" />
@@ -179,6 +188,14 @@ const socialLinks = computed(() => {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
   transition: scrollbar-color 0.3s ease;
+}
+
+.description-line {
+  margin: 0 0 0.75rem;
+}
+
+.description-line:last-child {
+  margin-bottom: 0;
 }
 
 .description:hover {

@@ -3,7 +3,10 @@
     "name": "你的名字",
     "avatar": "https://avatars.githubusercontent.com/u/0?v=4",
     "bio": "一句话介绍自己",
-    "description": "这里是详细的个人简介，可以写多行内容。介绍你的技能、兴趣爱好、工作经历等。",
+    "description": [
+      "这里是详细的个人简介，可以写多行内容。",
+      "介绍你的技能、兴趣爱好、工作经历等。"
+    ],
     "socialLinks": {
       "github": "https://github.com/yourusername",
       "twitter": "",
