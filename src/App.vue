@@ -201,7 +201,7 @@ onMounted(() => {
   background: var(--center-bg);
   padding: 1.5rem 1.5rem 0.75rem;
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   position: relative;
   z-index: 10;
@@ -225,6 +225,8 @@ onMounted(() => {
 
 .desktop-footer {
   margin-top: auto;
+  flex-shrink: 0;
+  padding: 0.5rem 0 1rem;
 }
 
 .mobile-footer {
@@ -234,7 +236,7 @@ onMounted(() => {
 @media (max-width: 1024px) {
   .app-container {
     height: auto;
-    overflow: visible;
+    overflow-x: hidden;
   }
 
   .settings-btn {
@@ -256,6 +258,7 @@ onMounted(() => {
   .right-column {
     height: auto;
     overflow-y: visible;
+    overflow-x: hidden;
     box-shadow: none;
   }
 

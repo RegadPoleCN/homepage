@@ -58,6 +58,7 @@ const socialLinks = computed(() => {
   flex-direction: column;
   gap: 1rem;
   flex: 1;
+  min-height: 0;
 }
 
 .profile-card {
@@ -133,6 +134,10 @@ const socialLinks = computed(() => {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 :global([data-theme="light"]) .description-card,
@@ -165,6 +170,41 @@ const socialLinks = computed(() => {
   line-height: 1.6;
   color: var(--text-color);
   opacity: 0.85;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease;
+}
+
+.description:hover {
+  scrollbar-color: rgba(128, 128, 128, 0.3) transparent;
+}
+
+/* Custom scrollbar for Webkit */
+.description::-webkit-scrollbar {
+  width: 6px;
+}
+
+.description::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.description::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.description:hover::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.2);
+}
+
+.description::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.4);
 }
 
 .desktop-stats {
@@ -174,6 +214,11 @@ const socialLinks = computed(() => {
 @media (max-width: 1024px) {
   .desktop-stats {
     display: none;
+  }
+
+  .description {
+    flex: none;
+    max-height: 300px;
   }
 }
 </style>
