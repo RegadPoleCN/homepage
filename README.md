@@ -1,77 +1,73 @@
-# Homepage - 个人主页
+# Homepage - 现代化个人主页
 
-本项目由trae使用ai编写，非作者手写，有问题请在issue中指出或提交pr，谢谢
+本项目由 Trae 使用 AI 协作开发，是一个基于 Vue 3 + TypeScript + Vite 构建的现代化、高性能个人主页。支持深度定制、多主题切换及实时服务监控。
 
-一个基于 Vue 3 + TypeScript + Vite 构建的现代化个人主页。支持多主题切换、响应式设计，并完全由配置文件驱动
+## 🚀 核心特性
 
-## 🚀 特性
-
-- **多主题切换**：内置 6 种精美主题（浅色、深色、海洋、森林、紫罗兰、暖阳），并支持自定义背景
-- **配置驱动**：所有个人信息、社交链接、友链和页脚信息均可通过 `src/config/site.config.json` 进行配置
-- **现代化技术栈**：使用 Vue 3 (Composition API), TypeScript, Vite
-- **响应式设计**：完美适配不同尺寸的屏幕
-- **组件化开发**：清晰的项目结构，易于扩展和维护
+- **✨ 现代化 UI/UX**：基于玻璃拟态（Glassmorphism）风格设计，拥有流畅的进入动画与交互效果。
+- **🌓 深度主题系统**：内置 7 种精美主题预设，支持一键切换并实时持久化存储。
+- **📊 实时服务监控**：深度集成 [Uptime Kuma](https://uptime.kuma.pet/) API，实时展示服务在线率及 24 小时运行历史。
+- **📈 站点数据统计**：自动统计页面访问量（PV）并基于配置的起始时间实时计算站点运行天数。
+- **📱 完美移动端适配**：针对手机端进行深度优化，确保在各种屏幕尺寸下均能获得最佳浏览体验。
+- **⚙️ 全面配置驱动**：无需修改代码，通过 `src/config/site.config.json` 即可定制个人信息、社交链接、友链及监控项。
+- **⌨️ 开发者友好**：基于 TypeScript 编写，提供完善的类型检查与代码补全。
 
 ## 🛠️ 技术栈
 
-- **框架**: [Vue 3](https://vuejs.org/)
-- **构建工具**: [Vite](https://vitejs.dev/)
-- **语言**: [TypeScript](https://www.typescriptlang.org/)
-- **图标**: [Iconify](https://iconify.design/)
+- **框架**: [Vue 3 (Composition API)](https://vuejs.org/)
+- **状态管理**: [Pinia](https://pinia.vuejs.org/)
+- **构建工具**: [Vite 7](https://vitejs.dev/)
 - **工具库**: [VueUse](https://vueuse.org/)
+- **图标库**: [Iconify](https://iconify.design/)
+- **开发语言**: [TypeScript](https://www.typescriptlang.org/)
 
 ## 📂 项目结构
 
 ```text
 src/
-├── assets/          # 静态资源
+├── assets/          # 静态资源 (图片、字体等)
 ├── components/      # UI 组件
-│   ├── LeftSidebar.vue   # 左侧侧边栏 (个人信息)
-│   ├── CenterPanel.vue   # 中间面板 (主要内容)
-│   ├── RightPanel.vue    # 右侧面板 (额外信息)
-│   ├── Footer.vue        # 页脚组件
-│   └── SettingsModal.vue # 设置模态框 (主题切换)
-├── composables/     # 组合式函数 (如 useTheme)
-├── config/          # 配置文件 (site.config.json)
-├── App.vue          # 根组件
+│   ├── LeftSidebar.vue   # 个人基本信息侧边栏
+│   ├── CenterPanel.vue   # 核心内容区 (自我介绍、关于我)
+│   ├── RightPanel.vue    # 动态信息区 (监控卡片、友链)
+│   ├── UptimeCard.vue    # Uptime Kuma 监控组件
+│   ├── SiteStats.vue     # 站点统计组件 (PV、运行时长)
+│   └── SettingsModal.vue # 全局设置与主题切换
+├── composables/     # 逻辑封装 (主题控制、监控数据抓取等)
+├── config/          # 核心配置文件 (site.config.json)
+├── stores/          # Pinia 状态仓库 (主题状态等)
+├── App.vue          # 根容器与布局控制
 └── main.ts          # 入口文件
 ```
 
-## ⚙️ 配置指南
+## ⚙️ 快速配置
 
-编辑 `src/config/site.config.json` 来定制你的主页：
+编辑 `src/config/site.config.json` 即可快速上线：
 
-- `profile`: 个人头像、名字、简介和社交链接
-- `friendLinks`: 合作伙伴或朋友的链接列表
-- `footer`: ICP 备案号、公安备案号和版权信息
-- `themes`: 主题颜色配置
+- **Profile**: 设置姓名、头像、简介。`description` 字段支持数组格式以实现**自动换行**。
+- **friendLinks**: 可扩展的友链列表
+- **Uptime Kuma**: 配置 `url` 和 `slug` 即可启用实时服务监控。
+- **Site Stats**: 设置 `siteStartDate`（格式：`YYYY-MM-DD`）来显示站点运行时间。
+- **Footer**: ICP 备案、公安备案及版权声明信息。
 
 ## 🛠️ 开发与构建
 
 ### 安装依赖
-
 ```bash
 pnpm install
 ```
 
-### 启动开发服务器
-
+### 启动开发环境
 ```bash
 pnpm dev
 ```
 
-### 构建生产版本
-
+### 生产环境构建
 ```bash
 pnpm build
 ```
-
-### 预览构建产物
-
-```bash
-pnpm preview
-```
+*注：构建产物默认使用相对路径 (`./`)，支持直接部署在子目录下。*
 
 ## 📄 开源协议
 
-本项目采用 [GPL-v3](LICENSE) 协议开源
+本项目采用 [GPL-v3](LICENSE) 协议开源。
