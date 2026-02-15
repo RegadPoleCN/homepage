@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useStorage } from '@vueuse/core'
 import { siteConfig } from '../config/site.config'
 
