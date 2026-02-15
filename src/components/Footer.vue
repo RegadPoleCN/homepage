@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { Icon } from '@iconify/vue'
 import { siteConfig } from '../config/site.config'
+import SiteStats from './SiteStats.vue'
 
 const footer = siteConfig.footer
 
@@ -17,6 +18,7 @@ const yearRange = computed(() => {
 <template>
   <footer class="site-footer">
     <div class="footer-content">
+      <SiteStats class="mobile-stats" />
       <div class="beian-info">
         <a
           v-if="footer.icpBeian"
@@ -57,7 +59,18 @@ const yearRange = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.375rem;
+  gap: 0.75rem;
+}
+
+.mobile-stats {
+  display: none;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .mobile-stats {
+    display: flex;
+  }
 }
 
 .beian-info {

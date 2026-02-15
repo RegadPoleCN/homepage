@@ -84,10 +84,9 @@ const getOverallStatusIcon = () => {
 
       <div v-else-if="monitors.length" class="monitor-grid">
         <div 
-          v-for="(monitor, index) in monitors" 
+          v-for="monitor in monitors" 
           :key="monitor.id" 
           class="monitor-card-item"
-          :style="{ animationDelay: `${index * 50}ms` }"
         >
           <div class="monitor-card-header">
             <div 
@@ -329,19 +328,7 @@ const getOverallStatusIcon = () => {
   background: rgba(128, 128, 128, 0.05);
   border: 1px solid rgba(128, 128, 128, 0.08);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: slide-in 0.4s ease-out both;
   backdrop-filter: blur(4px);
-}
-
-@keyframes slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .monitor-card-item:hover {

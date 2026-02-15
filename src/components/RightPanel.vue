@@ -6,9 +6,6 @@ import { siteConfig } from '../config/site.config'
 
 <template>
   <section class="right-panel">
-    <!-- Uptime Kuma Card (Conditional) -->
-    <UptimeCard v-if="siteConfig.uptimeKuma" />
-
     <div class="content-card">
       <div class="card-header">
         <Icon icon="mdi:post-outline" class="header-icon" />
@@ -44,6 +41,9 @@ import { siteConfig } from '../config/site.config'
         </div>
       </div>
     </div>
+
+    <!-- Uptime Kuma Card (Conditional) -->
+    <UptimeCard v-if="siteConfig.uptimeKuma" />
 
     <div class="content-card">
       <div class="card-header">

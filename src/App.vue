@@ -135,7 +135,7 @@ onMounted(() => {
 }
 
 .back-to-top-btn.launching .rocket-wrapper {
-  animation: rocket-launch 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: rocket-launch 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes rocket-launch {
