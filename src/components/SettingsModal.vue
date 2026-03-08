@@ -57,8 +57,8 @@ const handleOverlayClick = (e: MouseEvent) => {
                   :key="theme.key"
                   class="theme-option"
                   :class="{ active: currentThemeKey === theme.key }"
-                  @click="handleThemeSelect(theme.key)"
                   :title="theme.name"
+                  @click="handleThemeSelect(theme.key)"
                 >
                   <div
                     class="theme-preview"
@@ -75,9 +75,9 @@ const handleOverlayClick = (e: MouseEvent) => {
                 <input
                   type="text"
                   :value="customBackgroundUrl"
-                  @input="handleBackgroundUrlChange"
                   placeholder="输入背景图片链接"
                   class="bg-url-input"
+                  @input="handleBackgroundUrlChange"
                 />
               </div>
             </div>

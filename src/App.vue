@@ -7,6 +7,7 @@ import CenterPanel from './components/CenterPanel.vue'
 import RightPanel from './components/RightPanel.vue'
 import Footer from './components/Footer.vue'
 import SettingsModal from './components/SettingsModal.vue'
+import GitHubBadge from './components/GitHubBadge.vue'
 import { useThemeStore } from './stores/theme'
 import { useScrollToTop } from './composables/useScrollToTop'
 
@@ -25,9 +26,11 @@ onMounted(() => {
 <template>
   <div class="app-container">
     <!-- Fixed Settings Button at root level -->
-    <button class="settings-btn" @click="showSettings = true" title="设置">
+    <button class="settings-btn" title="设置" @click="showSettings = true">
       <Icon icon="mdi:cog" />
     </button>
+
+    <GitHubBadge />
 
     <main class="main-layout">
       <aside class="left-column">
@@ -48,8 +51,8 @@ onMounted(() => {
     <button 
       class="back-to-top-btn" 
       :class="{ 'visible': showBackToTop, 'launching': isLaunching }"
-      @click="scrollToTop" 
-      title="回到顶部"
+      title="回到顶部" 
+      @click="scrollToTop"
     >
       <div class="rocket-wrapper">
         <Icon icon="mdi:rocket-launch" class="rocket-icon" />

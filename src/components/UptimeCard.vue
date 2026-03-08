@@ -48,15 +48,15 @@ const getOverallStatusIcon = () => {
       <button 
         class="refresh-btn" 
         :class="{ 'loading': loading }" 
-        @click="refresh" 
-        :disabled="loading"
+        :disabled="loading" 
         title="手动刷新"
+        @click="refresh"
       >
         <Icon icon="mdi:refresh" />
       </button>
     </div>
 
-    <div class="status-summary" v-if="!loading || monitors.length">
+    <div v-if="!loading || monitors.length" class="status-summary">
       <div class="status-badge" :class="overallStatus">
         <Icon :icon="getOverallStatusIcon()" :class="{ 'spin': loading && !monitors.length }" />
         <span>{{ getOverallStatusText() }}</span>
