@@ -2,110 +2,56 @@
 import { Icon } from '@iconify/vue'
 import UptimeCard from './UptimeCard.vue'
 import { siteConfig } from '../config/site.config'
+import type { ActivitySection, SkillSection, ProjectSection } from '../config/site.config'
+
+const rightPanelSections = siteConfig.rightPanel.sections
+
+const isActivitySection = (section: any): section is ActivitySection => section.type === 'activities'
+const isSkillSection = (section: any): section is SkillSection => section.type === 'skills'
+const isProjectSection = (section: any): section is ProjectSection => section.type === 'projects'
 </script>
 
 <template>
   <section class="right-panel">
-    <div class="content-card">
-      <div class="card-header">
-        <Icon icon="mdi:post-outline" class="header-icon" />
-        <h2>最新动态</h2>
+    <template v-for="section in rightPanelSections" :key="section.type">
+      <div v-if="section.enabled" class="content-card">
+        <div class="card-header">
+          <Icon :icon="section.icon" class="header-icon" />
+          <h2>{{ section.title }}</h2>
+        </div>
+        <div v-if="isActivitySection(section)" class="card-content">
+          <div v-for="(item, index) in section.items" :key="index" class="activity-item">
+            <div class="activity-icon">
+              <Icon :icon="item.icon" />
+            </div>
+            <div class="activity-info">
+              <span class="activity-title">{{ item.title }}</span>
+              <span class="activity-time">{{ item.time }}</span>
+            </div>
+          </div>
+        </div>
+        <div v-else-if="isSkillSection(section)" class="skills-grid">
+          <div v-for="(item, index) in section.items" :key="index" class="skill-tag">
+            <Icon :icon="item.icon" />
+            <span>{{ item.name }}</span>
+          </div>
+        </div>
+        <div v-else-if="isProjectSection(section)" class="projects-list">
+          <a v-for="(item, index) in section.items" :key="index" :href="item.url" class="project-item">
+            <div class="project-icon">
+              <Icon :icon="item.icon" />
+            </div>
+            <div class="project-info">
+              <span class="project-name">{{ item.name }}</span>
+              <span class="project-desc">{{ item.description }}</span>
+            </div>
+            <Icon icon="mdi:chevron-right" class="project-arrow" />
+          </a>
+        </div>
       </div>
-      <div class="card-content">
-        <div class="activity-item">
-          <div class="activity-icon">
-            <Icon icon="mdi:code-braces" />
-          </div>
-          <div class="activity-info">
-            <span class="activity-title">开始了一个新项目</span>
-            <span class="activity-time">2 天前</span>
-          </div>
-        </div>
-        <div class="activity-item">
-          <div class="activity-icon">
-            <Icon icon="mdi:book-open-page-variant" />
-          </div>
-          <div class="activity-info">
-            <span class="activity-title">发布了一篇博客文章</span>
-            <span class="activity-time">1 周前</span>
-          </div>
-        </div>
-        <div class="activity-item">
-          <div class="activity-icon">
-            <Icon icon="mdi:star" />
-          </div>
-          <div class="activity-info">
-            <span class="activity-title">收获了 100 个 Star</span>
-            <span class="activity-time">2 周前</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    </template>
 
-    <!-- Uptime Kuma Card (Conditional) -->
     <UptimeCard v-if="siteConfig.uptimeKuma" />
-
-    <div class="content-card">
-      <div class="card-header">
-        <Icon icon="mdi:lightbulb-on" class="header-icon" />
-        <h2>技能专长</h2>
-      </div>
-      <div class="skills-grid">
-        <div class="skill-tag">
-          <Icon icon="logos:vue" />
-          <span>Vue.js</span>
-        </div>
-        <div class="skill-tag">
-          <Icon icon="logos:typescript-icon" />
-          <span>TypeScript</span>
-        </div>
-        <div class="skill-tag">
-          <Icon icon="logos:react" />
-          <span>React</span>
-        </div>
-        <div class="skill-tag">
-          <Icon icon="logos:nodejs-icon" />
-          <span>Node.js</span>
-        </div>
-        <div class="skill-tag">
-          <Icon icon="logos:python" />
-          <span>Python</span>
-        </div>
-        <div class="skill-tag">
-          <Icon icon="logos:docker-icon" />
-          <span>Docker</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-card">
-      <div class="card-header">
-        <Icon icon="mdi:folder-multiple" class="header-icon" />
-        <h2>精选项目</h2>
-      </div>
-      <div class="projects-list">
-        <a href="#" class="project-item">
-          <div class="project-icon">
-            <Icon icon="mdi:github" />
-          </div>
-          <div class="project-info">
-            <span class="project-name">项目名称 1</span>
-            <span class="project-desc">这是一个很棒的开源项目描述</span>
-          </div>
-          <Icon icon="mdi:chevron-right" class="project-arrow" />
-        </a>
-        <a href="#" class="project-item">
-          <div class="project-icon">
-            <Icon icon="mdi:github" />
-          </div>
-          <div class="project-info">
-            <span class="project-name">项目名称 2</span>
-            <span class="project-desc">另一个精彩项目的简短介绍</span>
-          </div>
-          <Icon icon="mdi:chevron-right" class="project-arrow" />
-        </a>
-      </div>
-    </div>
   </section>
 </template>
 

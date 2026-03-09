@@ -1,3 +1,55 @@
+export interface SocialLink {
+  key: string;
+  icon: string;
+  title: string;
+  url: string;
+  target?: string;
+}
+
+export interface Activity {
+  icon: string;
+  title: string;
+  time: string;
+}
+
+export interface Skill {
+  icon: string;
+  name: string;
+}
+
+export interface Project {
+  icon: string;
+  name: string;
+  description: string;
+  url: string;
+}
+
+export interface ActivitySection {
+  type: 'activities';
+  enabled: boolean;
+  title: string;
+  icon: string;
+  items: Activity[];
+}
+
+export interface SkillSection {
+  type: 'skills';
+  enabled: boolean;
+  title: string;
+  icon: string;
+  items: Skill[];
+}
+
+export interface ProjectSection {
+  type: 'projects';
+  enabled: boolean;
+  title: string;
+  icon: string;
+  items: Project[];
+}
+
+export type RightPanelSection = ActivitySection | SkillSection | ProjectSection;
+
 export interface FriendLink {
   name: string;
   url: string;
@@ -25,13 +77,7 @@ export interface SiteConfig {
     avatar: string;
     bio: string;
     description: string | string[];
-    socialLinks: {
-      github?: string;
-      twitter?: string;
-      email?: string;
-      weibo?: string;
-      zhihu?: string;
-    };
+    socialLinks: SocialLink[];
   };
   friendLinks: FriendLink[];
   footer: {
@@ -43,6 +89,9 @@ export interface SiteConfig {
     siteStartDate: string;
   };
   themes: ThemePreset[];
+  rightPanel: {
+    sections: RightPanelSection[];
+  };
   uptimeKuma?: {
     url: string;
     slug: string;

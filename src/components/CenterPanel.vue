@@ -7,14 +7,7 @@ import SiteStats from './SiteStats.vue'
 const profile = siteConfig.profile
 
 const socialLinks = computed(() => {
-  const links = [
-    { key: 'github', icon: 'mdi:github', title: 'GitHub', url: profile.socialLinks.github },
-    { key: 'twitter', icon: 'mdi:twitter', title: 'Twitter', url: profile.socialLinks.twitter },
-    { key: 'email', icon: 'mdi:email', title: 'Email', url: profile.socialLinks.email ? `mailto:${profile.socialLinks.email}` : '' },
-    { key: 'weibo', icon: 'mdi:sina-weibo', title: '微博', url: profile.socialLinks.weibo },
-    { key: 'zhihu', icon: 'simple-icons:zhihu', title: '知乎', url: profile.socialLinks.zhihu },
-  ]
-  return links.filter(link => link.url)
+  return profile.socialLinks.filter(link => link.url)
 })
 </script>
 

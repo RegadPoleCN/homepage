@@ -7,13 +7,22 @@
       "这里是详细的个人简介，可以写多行内容。",
       "介绍你的技能、兴趣爱好、工作经历等。"
     ],
-    "socialLinks": {
-      "github": "https://github.com/yourusername",
-      "twitter": "",
-      "email": "your@email.com",
-      "weibo": "",
-      "zhihu": ""
-    }
+    "socialLinks": [
+      {
+        "key": "github",
+        "icon": "mdi:github",
+        "title": "GitHub",
+        "url": "https://github.com/yourusername",
+        "target": "_blank"
+      },
+      {
+        "key": "email",
+        "icon": "mdi:email",
+        "title": "Email",
+        "url": "mailto:your@email.com",
+        "target": "_self"
+      }
+    ]
   },
   "friendLinks": [
     {
@@ -133,5 +142,84 @@
   "uptimeKuma": {
     "url": "https://status.example.com",
     "slug": "index"
+  },
+  "rightPanel": {
+    "sections": [
+      {
+        "type": "activities",
+        "enabled": true,
+        "title": "最新动态",
+        "icon": "mdi:post-outline",
+        "items": [
+          {
+            "icon": "mdi:code-braces",
+            "title": "开始了一个新项目",
+            "time": "2 天前"
+          },
+          {
+            "icon": "mdi:book-open-page-variant",
+            "title": "发布了一篇博客文章",
+            "time": "1 周前"
+          },
+          {
+            "icon": "mdi:star",
+            "title": "收获了 100 个 Star",
+            "time": "2 周前"
+          }
+        ]
+      },
+      {
+        "type": "skills",
+        "enabled": true,
+        "title": "技能专长",
+        "icon": "mdi:lightbulb-on",
+        "items": [
+          {
+            "icon": "logos:vue",
+            "name": "Vue.js"
+          },
+          {
+            "icon": "logos:typescript-icon",
+            "name": "TypeScript"
+          },
+          {
+            "icon": "logos:react",
+            "name": "React"
+          },
+          {
+            "icon": "logos:nodejs-icon",
+            "name": "Node.js"
+          },
+          {
+            "icon": "logos:python",
+            "name": "Python"
+          },
+          {
+            "icon": "logos:docker-icon",
+            "name": "Docker"
+          }
+        ]
+      },
+      {
+        "type": "projects",
+        "enabled": true,
+        "title": "精选项目",
+        "icon": "mdi:folder-multiple",
+        "items": [
+          {
+            "icon": "mdi:github",
+            "name": "项目名称 1",
+            "description": "这是一个很棒的开源项目描述",
+            "url": "#"
+          },
+          {
+            "icon": "mdi:github",
+            "name": "项目名称 2",
+            "description": "另一个精彩项目的简短介绍",
+            "url": "#"
+          }
+        ]
+      }
+    ]
   }
 }
