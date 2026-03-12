@@ -28,6 +28,12 @@ export function formatRelativeTime(timestamp: number | string): string {
 
   const now = Date.now();
   const diff = now - timeValue;
+  const absDiff = Math.abs(diff);
+
+  // 刚刚（小于 1 秒）
+  if (absDiff < 1000) {
+    return '刚刚';
+  }
 
   // 时间间隔（毫秒）
   const intervals: Array<[number, string]> = [
@@ -40,28 +46,24 @@ export function formatRelativeTime(timestamp: number | string): string {
     [1000, '秒'],
   ];
 
-  // 刚刚（小于 1 秒）
-  if (Math.abs(diff) < 1000) {
-    return '刚刚';
-  }
-
-  // 未来时间
-  if (diff < 0) {
-    const absDiff = Math.abs(diff);
-    for (const [ms, unit] of intervals) {
-      const count = Math.floor(absDiff / ms);
-      if (count >= 1) {
-        return `${count}${unit}后`;
-      }
-    }
-    return '刚刚';
-  }
-
-  // 过去时间
-  for (const [ms, unit] of intervals) {
-    const count = Math.floor(diff / ms);
+  // 找到合适的时间单位
+  for (let i = 0; i < intervals.length; i++) {
+    const [ms, unit] = intervals[i];
+    const count = Math.floor(absDiff / ms);
+    
     if (count >= 1) {
-      return `${count}${unit}前`;
+      // 如果接近下一个更大的单位（超过 80% 且当前单位不是最小单位），使用更大的单位
+      if (i > 0 && count >= 12) {
+        const [largerMs, largerUnit] = intervals[i - 1];
+        const largerCount = Math.floor(absDiff / largerMs);
+        if (largerCount >= 1) {
+          const prefix = diff < 0 ? '后' : '前';
+          return `${largerCount}${largerUnit}${prefix}`;
+        }
+      }
+      
+      const prefix = diff < 0 ? '后' : '前';
+      return `${count}${unit}${prefix}`;
     }
   }
 
