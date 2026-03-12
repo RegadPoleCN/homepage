@@ -26,19 +26,19 @@
   },
   "friendLinks": [
     {
-      "name": "友链1",
+      "name": "友链 1",
       "url": "https://example.com",
       "avatar": "https://avatars.githubusercontent.com/u/1?v=4",
       "description": "这是一个友链描述"
     },
     {
-      "name": "友链2",
+      "name": "友链 2",
       "url": "https://example2.com",
       "avatar": "https://avatars.githubusercontent.com/u/2?v=4",
       "description": "另一个友链描述"
     },
     {
-      "name": "友链3",
+      "name": "友链 3",
       "url": "https://example3.com",
       "avatar": "https://avatars.githubusercontent.com/u/3?v=4",
       "description": "第三个友链"
@@ -144,7 +144,36 @@
     "slug": "index"
   },
   "rightPanel": {
+    "enableOrderConfig": true,
     "sections": [
+      {
+        "type": "personalWebsites",
+        "enabled": true,
+        "title": "个人网站",
+        "icon": "mdi:web",
+        "items": [
+          {
+            "icon": "logos:blogger",
+            "name": "个人博客",
+            "url": "https://blog.example.com",
+            "description": "我的技术博客"
+          },
+          {
+            "icon": "https://cdn-icons-png.flaticon.com/512/938/938833.png",
+            "name": "摄影作品集",
+            "url": "https://photo.example.com",
+            "description": "我的摄影作品展示"
+          },
+          {
+            "icon": {
+              "src": "mdi:file-document-outline"
+            },
+            "name": "简历页面",
+            "url": "https://resume.example.com",
+            "description": "在线简历"
+          }
+        ]
+      },
       {
         "type": "activities",
         "enabled": true,
@@ -154,17 +183,22 @@
           {
             "icon": "mdi:code-braces",
             "title": "开始了一个新项目",
-            "time": "2 天前"
+            "timestamp": "2024-12-10T10:00:00Z"
           },
           {
             "icon": "mdi:book-open-page-variant",
             "title": "发布了一篇博客文章",
-            "time": "1 周前"
+            "timestamp": "2024-12-05T14:30:00Z"
           },
           {
             "icon": "mdi:star",
             "title": "收获了 100 个 Star",
-            "time": "2 周前"
+            "timestamp": "2024-11-28T09:15:00Z"
+          },
+          {
+            "icon": "mdi:rocket-launch",
+            "title": "即将发布新版本（未来时间示例）",
+            "timestamp": "2026-12-31T23:59:59Z"
           }
         ]
       },
@@ -207,16 +241,24 @@
         "icon": "mdi:folder-multiple",
         "items": [
           {
-            "icon": "mdi:github",
-            "name": "项目名称 1",
-            "description": "这是一个很棒的开源项目描述",
-            "url": "#"
+            "icon": "logos:vue",
+            "name": "Vue 个人博客",
+            "description": "基于 Vue 3 + Vite 构建的静态博客系统",
+            "url": "https://github.com/yourname/vue-blog"
           },
           {
-            "icon": "mdi:github",
-            "name": "项目名称 2",
-            "description": "另一个精彩项目的简短介绍",
-            "url": "#"
+            "icon": "https://cdn-icons-png.flaticon.com/512/906/906324.png",
+            "name": "电商网站",
+            "description": "全栈电商平台（使用图片链接作为图标示例）",
+            "url": "https://shop.example.com"
+          },
+          {
+            "icon": {
+              "src": "logos:typescript-icon"
+            },
+            "name": "工具库",
+            "description": "TypeScript 编写的实用工具库（使用对象配置示例）",
+            "url": "https://github.com/yourname/utils-lib"
           }
         ]
       }

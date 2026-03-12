@@ -1,24 +1,40 @@
+/**
+ * 图标配置接口
+ * 支持自动识别图片链接或 Iconify 图标库
+ */
+export interface IconConfig {
+  /** 图标来源：可以是图片 URL 或 Iconify 图标（如 'mdi:github'） */
+  src: string;
+}
+
 export interface SocialLink {
   key: string;
-  icon: string;
+  /** 支持字符串（向后兼容）或 IconConfig 对象 */
+  icon: string | IconConfig;
   title: string;
   url: string;
   target?: string;
 }
 
 export interface Activity {
-  icon: string;
+  /** 支持字符串（向后兼容）或 IconConfig 对象 */
+  icon: string | IconConfig;
   title: string;
-  time: string;
+  /** 时间戳（毫秒）或 ISO 日期字符串，用于自动计算相对时间 */
+  timestamp?: number | string;
+  /** 保留 time 字段以支持向后兼容（手动输入的时间文本） */
+  time?: string;
 }
 
 export interface Skill {
-  icon: string;
+  /** 支持字符串（向后兼容）或 IconConfig 对象 */
+  icon: string | IconConfig;
   name: string;
 }
 
 export interface Project {
-  icon: string;
+  /** 支持字符串（向后兼容）或 IconConfig 对象 */
+  icon: string | IconConfig;
   name: string;
   description: string;
   url: string;
@@ -28,7 +44,8 @@ export interface ActivitySection {
   type: 'activities';
   enabled: boolean;
   title: string;
-  icon: string;
+  /** 支持字符串（向后兼容）或 IconConfig 对象 */
+  icon: string | IconConfig;
   items: Activity[];
 }
 
@@ -36,7 +53,8 @@ export interface SkillSection {
   type: 'skills';
   enabled: boolean;
   title: string;
-  icon: string;
+  /** 支持字符串（向后兼容）或 IconConfig 对象 */
+  icon: string | IconConfig;
   items: Skill[];
 }
 
@@ -44,11 +62,10 @@ export interface ProjectSection {
   type: 'projects';
   enabled: boolean;
   title: string;
-  icon: string;
+  /** 支持字符串（向后兼容）或 IconConfig 对象 */
+  icon: string | IconConfig;
   items: Project[];
 }
-
-export type RightPanelSection = ActivitySection | SkillSection | ProjectSection;
 
 export interface FriendLink {
   name: string;
@@ -56,6 +73,32 @@ export interface FriendLink {
   avatar?: string;
   description?: string;
 }
+
+export interface PersonalWebsiteItem {
+  /** 网站名称 */
+  name: string;
+  /** 网站 URL */
+  url: string;
+  /** 网站图标（支持图片链接或 Iconify 图标） */
+  icon: string | IconConfig;
+  /** 描述（可选） */
+  description?: string;
+}
+
+export interface PersonalWebsiteSection {
+  type: 'personalWebsites';
+  enabled: boolean;
+  title: string;
+  /** 支持字符串（向后兼容）或 IconConfig 对象 */
+  icon: string | IconConfig;
+  items: PersonalWebsiteItem[];
+}
+
+export type RightPanelSection =
+  | ActivitySection
+  | SkillSection
+  | ProjectSection
+  | PersonalWebsiteSection;
 
 export interface ThemePreset {
   name: string;
@@ -90,6 +133,8 @@ export interface SiteConfig {
   };
   themes: ThemePreset[];
   rightPanel: {
+    /** 是否启用卡片顺序配置 */
+    enableOrderConfig?: boolean;
     sections: RightPanelSection[];
   };
   uptimeKuma?: {
