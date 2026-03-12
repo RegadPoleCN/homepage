@@ -48,13 +48,19 @@ export function formatRelativeTime(timestamp: number | string): string {
 
   // 找到合适的时间单位
   for (let i = 0; i < intervals.length; i++) {
-    const [ms, unit] = intervals[i];
+    const interval = intervals[i];
+    if (!interval) continue;
+    
+    const [ms, unit] = interval;
     const count = Math.floor(absDiff / ms);
     
     if (count >= 1) {
       // 如果接近下一个更大的单位（超过 80% 且当前单位不是最小单位），使用更大的单位
       if (i > 0 && count >= 12) {
-        const [largerMs, largerUnit] = intervals[i - 1];
+        const largerInterval = intervals[i - 1];
+        if (!largerInterval) continue;
+        
+        const [largerMs, largerUnit] = largerInterval;
         const largerCount = Math.floor(absDiff / largerMs);
         if (largerCount >= 1) {
           const prefix = diff < 0 ? '后' : '前';

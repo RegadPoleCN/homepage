@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Icon } from '@iconify/vue';
+import type { IconifyIcon } from '@iconify/vue';
 import { siteConfig } from '../config/site.config';
 import SiteStats from './SiteStats.vue';
 
@@ -9,6 +10,16 @@ const profile = siteConfig.profile;
 const socialLinks = computed(() => {
   return profile.socialLinks.filter((link) => link.url);
 });
+
+/**
+ * 获取图标字符串（向后兼容）
+ */
+function getIcon(icon: string | { src: string }): string | IconifyIcon {
+  if (typeof icon === 'string') {
+    return icon;
+  }
+  return icon.src;
+}
 </script>
 
 <template>
@@ -29,7 +40,7 @@ const socialLinks = computed(() => {
           class="social-link"
           :title="link.title"
         >
-          <Icon :icon="link.icon" />
+          <Icon :icon="getIcon(link.icon)" />
         </a>
       </div>
     </div>
