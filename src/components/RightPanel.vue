@@ -1,45 +1,98 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import UptimeCard from './UptimeCard.vue'
-import { siteConfig } from '../config/site.config'
-import type { ActivitySection, SkillSection, ProjectSection } from '../config/site.config'
+import UptimeCard from './UptimeCard.vue';
+import SmartIcon from './SmartIcon.vue';
+import { siteConfig } from '../config/site.config';
+import type {
+  ActivitySection,
+  SkillSection,
+  ProjectSection,
+  PersonalWebsiteSection,
+} from '../config/site.config';
+import { formatRelativeTime } from '../utils/format';
 
-const rightPanelSections = siteConfig.rightPanel.sections
+const rightPanelSections = siteConfig.rightPanel.sections;
 
-const isActivitySection = (section: any): section is ActivitySection => section.type === 'activities'
-const isSkillSection = (section: any): section is SkillSection => section.type === 'skills'
-const isProjectSection = (section: any): section is ProjectSection => section.type === 'projects'
+const isActivitySection = (section: any): section is ActivitySection =>
+  section.type === 'activities';
+const isSkillSection = (section: any): section is SkillSection => section.type === 'skills';
+const isProjectSection = (section: any): section is ProjectSection => section.type === 'projects';
+const isPersonalWebsiteSection = (section: any): section is PersonalWebsiteSection =>
+  section.type === 'personalWebsites';
+
+/**
+ * 获取活动的相对时间描述
+ * 优先使用 timestamp 自动计算，如果不存在则使用 time 字段（向后兼容）
+ */
+function getActivityTime(item: any): string {
+  if (item.timestamp !== undefined && item.timestamp !== null) {
+    return formatRelativeTime(item.timestamp);
+  }
+  return item.time || '';
+}
 </script>
 
 <template>
   <section class="right-panel">
+    <!-- 右栏区块 -->
     <template v-for="section in rightPanelSections" :key="section.type">
       <div v-if="section.enabled" class="content-card">
         <div class="card-header">
-          <Icon :icon="section.icon" class="header-icon" />
+          <SmartIcon :icon="section.icon" class="header-icon" />
           <h2>{{ section.title }}</h2>
         </div>
-        <div v-if="isActivitySection(section)" class="card-content">
+
+        <!-- 个人网站列表 -->
+        <div v-if="isPersonalWebsiteSection(section)" class="websites-list">
+          <a
+            v-for="(item, index) in section.items"
+            :key="index"
+            :href="item.url"
+            class="website-item"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="website-icon">
+              <SmartIcon :icon="item.icon" size="24" />
+            </div>
+            <div class="website-info">
+              <span class="website-name">{{ item.name }}</span>
+              <span v-if="item.description" class="website-desc">{{ item.description }}</span>
+            </div>
+            <Icon icon="mdi:chevron-right" class="website-arrow" />
+          </a>
+        </div>
+
+        <!-- 活动列表 -->
+        <div v-else-if="isActivitySection(section)" class="card-content">
           <div v-for="(item, index) in section.items" :key="index" class="activity-item">
             <div class="activity-icon">
-              <Icon :icon="item.icon" />
+              <SmartIcon :icon="item.icon" size="20" />
             </div>
             <div class="activity-info">
               <span class="activity-title">{{ item.title }}</span>
-              <span class="activity-time">{{ item.time }}</span>
+              <span class="activity-time">{{ getActivityTime(item) }}</span>
             </div>
           </div>
         </div>
+
+        <!-- 技能网格 -->
         <div v-else-if="isSkillSection(section)" class="skills-grid">
           <div v-for="(item, index) in section.items" :key="index" class="skill-tag">
-            <Icon :icon="item.icon" />
+            <SmartIcon :icon="item.icon" size="18" />
             <span>{{ item.name }}</span>
           </div>
         </div>
+
+        <!-- 项目列表 -->
         <div v-else-if="isProjectSection(section)" class="projects-list">
-          <a v-for="(item, index) in section.items" :key="index" :href="item.url" class="project-item">
+          <a
+            v-for="(item, index) in section.items"
+            :key="index"
+            :href="item.url"
+            class="project-item"
+          >
             <div class="project-icon">
-              <Icon :icon="item.icon" />
+              <SmartIcon :icon="item.icon" size="24" />
             </div>
             <div class="project-info">
               <span class="project-name">{{ item.name }}</span>
@@ -55,6 +108,10 @@ const isProjectSection = (section: any): section is ProjectSection => section.ty
   </section>
 </template>
 
+<script lang="ts">
+import { Icon } from '@iconify/vue';
+</script>
+
 <style scoped>
 .right-panel {
   display: flex;
@@ -69,10 +126,10 @@ const isProjectSection = (section: any): section is ProjectSection => section.ty
   padding: 1.5rem;
 }
 
-:global([data-theme="light"]) .content-card,
-:global([data-theme="warm"]) .content-card {
+:global([data-theme='light']) .content-card,
+:global([data-theme='warm']) .content-card {
   background: var(--card-background);
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.1),
     0 12px 32px rgba(0, 0, 0, 0.12),
     0 24px 64px rgba(0, 0, 0, 0.1);
@@ -89,6 +146,9 @@ const isProjectSection = (section: any): section is ProjectSection => section.ty
 }
 
 .header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.25rem;
   color: var(--primary-color);
 }
@@ -100,6 +160,72 @@ const isProjectSection = (section: any): section is ProjectSection => section.ty
   color: var(--text-color);
 }
 
+/* 个人网站列表 */
+.websites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.website-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: rgba(128, 128, 128, 0.08);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.website-item:hover {
+  background: rgba(128, 128, 128, 0.15);
+  transform: translateX(4px);
+}
+
+.website-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--accent-color);
+  color: white;
+  flex-shrink: 0;
+}
+
+.website-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.website-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.website-desc {
+  font-size: 0.8125rem;
+  color: var(--text-color);
+  opacity: 0.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.website-arrow {
+  font-size: 1.25rem;
+  color: var(--text-color);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+/* 活动列表 */
 .card-content {
   display: flex;
   flex-direction: column;
@@ -151,6 +277,7 @@ const isProjectSection = (section: any): section is ProjectSection => section.ty
   opacity: 0.6;
 }
 
+/* 技能网格 */
 .skills-grid {
   display: flex;
   flex-wrap: wrap;
@@ -175,6 +302,7 @@ const isProjectSection = (section: any): section is ProjectSection => section.ty
   transform: translateY(-2px);
 }
 
+/* 项目列表 */
 .projects-list {
   display: flex;
   flex-direction: column;
