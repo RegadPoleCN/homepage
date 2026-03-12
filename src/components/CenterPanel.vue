@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { Icon } from '@iconify/vue'
-import { siteConfig } from '../config/site.config'
-import SiteStats from './SiteStats.vue'
+import { computed } from 'vue';
+import { Icon } from '@iconify/vue';
+import { siteConfig } from '../config/site.config';
+import SiteStats from './SiteStats.vue';
 
-const profile = siteConfig.profile
+const profile = siteConfig.profile;
 
 const socialLinks = computed(() => {
-  return profile.socialLinks.filter(link => link.url)
-})
+  return profile.socialLinks.filter((link) => link.url);
+});
 </script>
 
 <template>
@@ -70,10 +70,10 @@ const socialLinks = computed(() => {
   text-align: center;
 }
 
-:global([data-theme="light"]) .profile-card,
-:global([data-theme="warm"]) .profile-card {
+:global([data-theme='light']) .profile-card,
+:global([data-theme='warm']) .profile-card {
   background: var(--card-background);
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.1),
     0 12px 32px rgba(0, 0, 0, 0.12),
     0 24px 64px rgba(0, 0, 0, 0.1);
@@ -142,10 +142,10 @@ const socialLinks = computed(() => {
   min-height: 0;
 }
 
-:global([data-theme="light"]) .description-card,
-:global([data-theme="warm"]) .description-card {
+:global([data-theme='light']) .description-card,
+:global([data-theme='warm']) .description-card {
   background: var(--card-background);
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.1),
     0 12px 32px rgba(0, 0, 0, 0.12),
     0 24px 64px rgba(0, 0, 0, 0.1);

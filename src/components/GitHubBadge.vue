@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
+import { Icon } from '@iconify/vue';
 
-const githubUrl = 'https://github.com/RegadPoleCN/homepage'
+const githubUrl = 'https://github.com/RegadPoleCN/homepage';
 </script>
 
 <template>
@@ -38,7 +38,7 @@ const githubUrl = 'https://github.com/RegadPoleCN/homepage'
 
 .github-icon {
   font-size: 32px;
-  transform: rotate(-45deg) translate(-1px, -12px) scale(1.10);
+  transform: rotate(-45deg) translate(-1px, -12px) scale(1.1);
   transition: transform 0.2s ease;
   color: var(--center-bg);
 }

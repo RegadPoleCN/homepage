@@ -1,41 +1,52 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { useUptimeKuma } from '../composables/useUptimeKuma'
-import { siteConfig } from '../config/site.config'
+import { Icon } from '@iconify/vue';
+import { useUptimeKuma } from '../composables/useUptimeKuma';
+import { siteConfig } from '../config/site.config';
 
-const { monitors, loading, overallStatus, error, lastUpdated, refresh } = useUptimeKuma()
+const { monitors, loading, overallStatus, error, lastUpdated, refresh } = useUptimeKuma();
 
 const getStatusColor = (status: number) => {
   switch (status) {
-    case 1: return '#22c55e' // Up
-    case 0: return '#ef4444' // Down
-    default: return '#94a3b8' // Unknown/Pending
+    case 1:
+      return '#22c55e'; // Up
+    case 0:
+      return '#ef4444'; // Down
+    default:
+      return '#94a3b8'; // Unknown/Pending
   }
-}
+};
 
 const getOverallStatusText = () => {
-  if (loading.value && !monitors.value.length) return '正在加载服务状态...'
-  if (error.value && !monitors.value.length) return '无法获取服务状态'
-  
+  if (loading.value && !monitors.value.length) return '正在加载服务状态...';
+  if (error.value && !monitors.value.length) return '无法获取服务状态';
+
   switch (overallStatus.value) {
-    case 'up': return '所有系统正常运行'
-    case 'partial': return '部分服务运行异常'
-    case 'down': return '所有服务均不可用'
-    default: return '状态未知'
+    case 'up':
+      return '所有系统正常运行';
+    case 'partial':
+      return '部分服务运行异常';
+    case 'down':
+      return '所有服务均不可用';
+    default:
+      return '状态未知';
   }
-}
+};
 
 const getOverallStatusIcon = () => {
-  if (loading.value && !monitors.value.length) return 'mdi:loading'
-  if (error.value && !monitors.value.length) return 'mdi:alert-circle-outline'
-  
+  if (loading.value && !monitors.value.length) return 'mdi:loading';
+  if (error.value && !monitors.value.length) return 'mdi:alert-circle-outline';
+
   switch (overallStatus.value) {
-    case 'up': return 'mdi:check-circle-outline'
-    case 'partial': return 'mdi:alert-outline'
-    case 'down': return 'mdi:close-circle-outline'
-    default: return 'mdi:help-circle-outline'
+    case 'up':
+      return 'mdi:check-circle-outline';
+    case 'partial':
+      return 'mdi:alert-outline';
+    case 'down':
+      return 'mdi:close-circle-outline';
+    default:
+      return 'mdi:help-circle-outline';
   }
-}
+};
 </script>
 
 <template>
@@ -45,10 +56,10 @@ const getOverallStatusIcon = () => {
         <Icon icon="mdi:server-network" class="header-icon" />
         <h2>服务状态</h2>
       </div>
-      <button 
-        class="refresh-btn" 
-        :class="{ 'loading': loading }" 
-        :disabled="loading" 
+      <button
+        class="refresh-btn"
+        :class="{ loading: loading }"
+        :disabled="loading"
         title="手动刷新"
         @click="refresh"
       >
@@ -58,7 +69,7 @@ const getOverallStatusIcon = () => {
 
     <div v-if="!loading || monitors.length" class="status-summary">
       <div class="status-badge" :class="overallStatus">
-        <Icon :icon="getOverallStatusIcon()" :class="{ 'spin': loading && !monitors.length }" />
+        <Icon :icon="getOverallStatusIcon()" :class="{ spin: loading && !monitors.length }" />
         <span>{{ getOverallStatusText() }}</span>
       </div>
       <span v-if="lastUpdated" class="last-updated">更新于 {{ lastUpdated }}</span>
@@ -70,7 +81,7 @@ const getOverallStatusIcon = () => {
           <div v-for="i in 3" :key="i" class="skeleton-item"></div>
         </div>
       </div>
-      
+
       <div v-else-if="error && !monitors.length" class="error-state">
         <div class="error-content">
           <Icon icon="mdi:alert-rhombus-outline" class="error-icon" />
@@ -83,15 +94,11 @@ const getOverallStatusIcon = () => {
       </div>
 
       <div v-else-if="monitors.length" class="monitor-grid">
-        <div 
-          v-for="monitor in monitors" 
-          :key="monitor.id" 
-          class="monitor-card-item"
-        >
+        <div v-for="monitor in monitors" :key="monitor.id" class="monitor-card-item">
           <div class="monitor-card-header">
-            <div 
-              class="status-dot" 
-              :class="{ 'pulse': monitor.status === 1 }"
+            <div
+              class="status-dot"
+              :class="{ pulse: monitor.status === 1 }"
               :style="{ backgroundColor: getStatusColor(monitor.status) }"
             ></div>
             <span class="monitor-name" :title="monitor.name">{{ monitor.name }}</span>
@@ -99,11 +106,11 @@ const getOverallStatusIcon = () => {
               {{ monitor.uptime.toFixed(1) }}%
             </span>
           </div>
-          
+
           <!-- Heartbeat History Bar -->
           <div v-if="monitor.history && monitor.history.length" class="monitor-history-bar">
-            <div 
-              v-for="(hStatus, hIndex) in monitor.history" 
+            <div
+              v-for="(hStatus, hIndex) in monitor.history"
               :key="hIndex"
               class="history-block"
               :style="{ backgroundColor: getStatusColor(hStatus) }"
@@ -224,9 +231,10 @@ const getOverallStatusIcon = () => {
 
 .skeleton-item {
   height: 36px;
-  background: linear-gradient(90deg, 
-    rgba(128, 128, 128, 0.05) 25%, 
-    rgba(128, 128, 128, 0.1) 50%, 
+  background: linear-gradient(
+    90deg,
+    rgba(128, 128, 128, 0.05) 25%,
+    rgba(128, 128, 128, 0.1) 50%,
     rgba(128, 128, 128, 0.05) 75%
   );
   background-size: 200% 100%;
@@ -235,8 +243,12 @@ const getOverallStatusIcon = () => {
 }
 
 @keyframes skeleton-loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .error-state {
@@ -309,8 +321,12 @@ const getOverallStatusIcon = () => {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .monitor-grid {
@@ -364,8 +380,14 @@ const getOverallStatusIcon = () => {
 }
 
 @keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 0.4; }
-  100% { transform: scale(2.5); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
 }
 
 .monitor-name {

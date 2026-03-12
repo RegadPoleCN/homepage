@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { siteConfig } from '../config/site.config'
+import { Icon } from '@iconify/vue';
+import { siteConfig } from '../config/site.config';
 
-const friendLinks = siteConfig.friendLinks
+const friendLinks = siteConfig.friendLinks;
 </script>
 
 <template>
@@ -21,12 +21,7 @@ const friendLinks = siteConfig.friendLinks
           rel="noopener noreferrer"
           class="friend-link"
         >
-          <img
-            v-if="link.avatar"
-            :src="link.avatar"
-            :alt="link.name"
-            class="friend-avatar"
-          />
+          <img v-if="link.avatar" :src="link.avatar" :alt="link.name" class="friend-avatar" />
           <div class="friend-info">
             <span class="friend-name">{{ link.name }}</span>
             <span v-if="link.description" class="friend-desc">{{ link.description }}</span>
@@ -48,10 +43,10 @@ const friendLinks = siteConfig.friendLinks
   padding: 1rem;
 }
 
-:global([data-theme="light"]) .sidebar-content,
-:global([data-theme="warm"]) .sidebar-content {
+:global([data-theme='light']) .sidebar-content,
+:global([data-theme='warm']) .sidebar-content {
   background: var(--card-background);
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.1),
     0 12px 32px rgba(0, 0, 0, 0.12),
     0 24px 64px rgba(0, 0, 0, 0.1);

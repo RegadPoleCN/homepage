@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { Icon } from '@iconify/vue'
-import { useWindowScroll } from '@vueuse/core'
-import LeftSidebar from './components/LeftSidebar.vue'
-import CenterPanel from './components/CenterPanel.vue'
-import RightPanel from './components/RightPanel.vue'
-import Footer from './components/Footer.vue'
-import SettingsModal from './components/SettingsModal.vue'
-import GitHubBadge from './components/GitHubBadge.vue'
-import { useThemeStore } from './stores/theme'
-import { useScrollToTop } from './composables/useScrollToTop'
+import { ref, onMounted, computed } from 'vue';
+import { Icon } from '@iconify/vue';
+import { useWindowScroll } from '@vueuse/core';
+import LeftSidebar from './components/LeftSidebar.vue';
+import CenterPanel from './components/CenterPanel.vue';
+import RightPanel from './components/RightPanel.vue';
+import Footer from './components/Footer.vue';
+import SettingsModal from './components/SettingsModal.vue';
+import GitHubBadge from './components/GitHubBadge.vue';
+import { useThemeStore } from './stores/theme';
+import { useScrollToTop } from './composables/useScrollToTop';
 
-const themeStore = useThemeStore()
-const { y } = useWindowScroll()
-const { isLaunching, scrollToTop } = useScrollToTop()
+const themeStore = useThemeStore();
+const { y } = useWindowScroll();
+const { isLaunching, scrollToTop } = useScrollToTop();
 
-const showSettings = ref(false)
-const showBackToTop = computed(() => y.value > 500)
+const showSettings = ref(false);
+const showBackToTop = computed(() => y.value > 500);
 
 onMounted(() => {
-  themeStore.initTheme()
-})
+  themeStore.initTheme();
+});
 </script>
 
 <template>
@@ -48,10 +48,10 @@ onMounted(() => {
     <Footer class="mobile-footer" />
 
     <!-- Back to Top Button with internal animation -->
-    <button 
-      class="back-to-top-btn" 
-      :class="{ 'visible': showBackToTop, 'launching': isLaunching }"
-      title="回到顶部" 
+    <button
+      class="back-to-top-btn"
+      :class="{ visible: showBackToTop, launching: isLaunching }"
+      title="回到顶部"
       @click="scrollToTop"
     >
       <div class="rocket-wrapper">
@@ -303,7 +303,7 @@ onMounted(() => {
     width: 48px;
     height: 48px;
   }
-  
+
   .rocket-icon {
     font-size: 1.5rem;
   }

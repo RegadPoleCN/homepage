@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { Icon } from '@iconify/vue'
-import { siteConfig } from '../config/site.config'
-import SiteStats from './SiteStats.vue'
+import { computed } from 'vue';
+import { Icon } from '@iconify/vue';
+import { siteConfig } from '../config/site.config';
+import SiteStats from './SiteStats.vue';
 
-const footer = siteConfig.footer
+const footer = siteConfig.footer;
 
-const currentYear = new Date().getFullYear()
+const currentYear = new Date().getFullYear();
 const yearRange = computed(() => {
   if (footer.startYear === currentYear) {
-    return String(currentYear)
+    return String(currentYear);
   }
-  return `${footer.startYear} - ${currentYear}`
-})
+  return `${footer.startYear} - ${currentYear}`;
+});
 </script>
 
 <template>

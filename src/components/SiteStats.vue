@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { useSiteStats } from '../composables/useSiteStats'
+import { Icon } from '@iconify/vue';
+import { useSiteStats } from '../composables/useSiteStats';
 
-const { runtime } = useSiteStats()
+const { runtime } = useSiteStats();
 </script>
 
 <template>
@@ -31,8 +31,8 @@ const { runtime } = useSiteStats()
   width: 100%;
 }
 
-:global([data-theme="light"]) .stats-card,
-:global([data-theme="warm"]) .stats-card {
+:global([data-theme='light']) .stats-card,
+:global([data-theme='warm']) .stats-card {
   background: var(--card-background);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(0, 0, 0, 0.08);

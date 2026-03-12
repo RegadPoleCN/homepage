@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { useThemeStore } from '../stores/theme'
-import { storeToRefs } from 'pinia'
+import { Icon } from '@iconify/vue';
+import { useThemeStore } from '../stores/theme';
+import { storeToRefs } from 'pinia';
 
 defineProps<{
-  visible: boolean
-}>()
+  visible: boolean;
+}>();
 
 const emit = defineEmits<{
-  close: []
-}>()
+  close: [];
+}>();
 
-const themeStore = useThemeStore()
-const { themes, currentThemeKey, customBackgroundUrl, isCustomTheme } = storeToRefs(themeStore)
-const { setTheme, setCustomBackground } = themeStore
+const themeStore = useThemeStore();
+const { themes, currentThemeKey, customBackgroundUrl, isCustomTheme } = storeToRefs(themeStore);
+const { setTheme, setCustomBackground } = themeStore;
 
 const handleThemeSelect = (themeKey: string) => {
-  setTheme(themeKey)
-}
+  setTheme(themeKey);
+};
 
 const handleBackgroundUrlChange = (e: Event) => {
-  const url = (e.target as HTMLInputElement).value
-  setCustomBackground(url)
-}
+  const url = (e.target as HTMLInputElement).value;
+  setCustomBackground(url);
+};
 
 const handleOverlayClick = (e: MouseEvent) => {
   if ((e.target as HTMLElement).classList.contains('modal-overlay')) {
-    emit('close')
+    emit('close');
   }
-}
+};
 </script>
 
 <template>
@@ -63,11 +63,19 @@ const handleOverlayClick = (e: MouseEvent) => {
                   <div
                     class="theme-preview"
                     :style="{
-                      background: `linear-gradient(135deg, ${theme.backgroundColor} 0%, ${theme.cardBackground} 50%, ${theme.primaryColor} 100%)`
+                      background: `linear-gradient(135deg, ${theme.backgroundColor} 0%, ${theme.cardBackground} 50%, ${theme.primaryColor} 100%)`,
                     }"
                   >
-                    <Icon v-if="theme.key === 'custom'" icon="mdi:image-edit-outline" class="custom-theme-icon" />
-                    <Icon v-if="currentThemeKey === theme.key" icon="mdi:check" class="check-icon" />
+                    <Icon
+                      v-if="theme.key === 'custom'"
+                      icon="mdi:image-edit-outline"
+                      class="custom-theme-icon"
+                    />
+                    <Icon
+                      v-if="currentThemeKey === theme.key"
+                      icon="mdi:check"
+                      class="check-icon"
+                    />
                   </div>
                 </button>
               </div>
@@ -108,7 +116,7 @@ const handleOverlayClick = (e: MouseEvent) => {
   max-width: 480px;
   max-height: 80vh;
   overflow: hidden;
-  box-shadow: 
+  box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.25),
     0 0 0 1px rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(var(--backdrop-blur, 0px));
