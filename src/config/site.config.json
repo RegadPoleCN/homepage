@@ -199,6 +199,21 @@
             "icon": "mdi:rocket-launch",
             "title": "即将发布新版本（未来时间示例）",
             "timestamp": "2026-12-31T23:59:59Z"
+          },
+          {
+            "icon": "mdi:calendar-check",
+            "title": "参加技术大会（自定义时间文本示例）",
+            "time": "2024 年 12 月 20 日"
+          },
+          {
+            "icon": "mdi:trophy",
+            "title": "获得开源贡献奖（自定义文字）",
+            "time": "上周"
+          },
+          {
+            "icon": "mdi:code-tags",
+            "title": "代码提交突破 1000 次（时间戳数字示例）",
+            "time": 1702800000000
           }
         ]
       },

@@ -20,10 +20,10 @@ export interface Activity {
   /** 支持字符串（向后兼容）或 IconConfig 对象 */
   icon: string | IconConfig;
   title: string;
-  /** 时间戳（毫秒）或 ISO 日期字符串，用于自动计算相对时间 */
+  /** 时间显示：可以是时间戳、ISO 日期字符串或自定义文本 */
+  time?: string | number;
+  /** 时间戳（毫秒）或 ISO 日期字符串，用于自动计算相对时间（优先级高于 time） */
   timestamp?: number | string;
-  /** 保留 time 字段以支持向后兼容（手动输入的时间文本） */
-  time?: string;
 }
 
 export interface Skill {
