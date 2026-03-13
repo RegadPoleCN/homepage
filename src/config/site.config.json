@@ -183,22 +183,22 @@
           {
             "icon": "mdi:code-braces",
             "title": "开始了一个新项目",
-            "timestamp": "2024-12-10T10:00:00Z"
+            "time": "2024-12-10T10:00:00Z"
           },
           {
             "icon": "mdi:book-open-page-variant",
             "title": "发布了一篇博客文章",
-            "timestamp": "2024-12-05T14:30:00Z"
+            "time": "2024-12-05T14:30:00Z"
           },
           {
             "icon": "mdi:star",
             "title": "收获了 100 个 Star",
-            "timestamp": "2024-11-28T09:15:00Z"
+            "time": "2024-11-28T09:15:00Z"
           },
           {
             "icon": "mdi:rocket-launch",
             "title": "即将发布新版本（未来时间示例）",
-            "timestamp": "2026-12-31T23:59:59Z"
+            "time": "2026-12-31T23:59:59Z"
           },
           {
             "icon": "mdi:calendar-check",

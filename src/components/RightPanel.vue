@@ -21,42 +21,40 @@ const isPersonalWebsiteSection = (section: any): section is PersonalWebsiteSecti
 
 /**
  * 获取活动的相对时间描述
- * 智能识别并处理不同类型的时间字段：
- * - timestamp: 优先使用，自动计算相对时间
- * - time: 支持时间戳（自动计算）或自定义文本（直接显示）
+ * 智能识别并处理不同类型的 time 字段：
+ * - 数字：视为时间戳（毫秒），自动计算相对时间
+ * - ISO 日期字符串：自动计算相对时间
+ * - 纯数字字符串：转换为时间戳后计算
+ * - 其他字符串：作为自定义文本直接显示
  */
 function getActivityTime(item: any): string {
-  // 优先使用 timestamp 字段
-  if (item.timestamp !== undefined && item.timestamp !== null) {
-    return formatRelativeTime(item.timestamp);
+  const timeValue = item.time;
+  
+  if (timeValue === undefined || timeValue === null) {
+    return '';
   }
   
-  // 处理 time 字段
-  if (item.time !== undefined && item.time !== null) {
-    const timeValue = item.time;
+  // 如果是数字，认为是时间戳，自动计算相对时间
+  if (typeof timeValue === 'number') {
+    return formatRelativeTime(timeValue);
+  }
+  
+  // 如果是字符串，尝试解析为日期
+  if (typeof timeValue === 'string') {
+    // 检查是否为 ISO 日期格式或纯数字字符串
+    const isoDatePattern = /^\d{4}-\d{2}-\d{2}/;
+    const timestampPattern = /^\d+$/;
     
-    // 如果是数字，认为是时间戳，自动计算相对时间
-    if (typeof timeValue === 'number') {
-      return formatRelativeTime(timeValue);
-    }
-    
-    // 如果是字符串，尝试解析为日期
-    if (typeof timeValue === 'string') {
-      // 检查是否为 ISO 日期格式或时间戳字符串
-      const isoDatePattern = /^\d{4}-\d{2}-\d{2}/;
-      const timestampPattern = /^\d+$/;
-      
-      if (isoDatePattern.test(timeValue) || timestampPattern.test(timeValue)) {
-        // 是日期格式或纯数字字符串，转换为时间戳
-        const parsedTime = new Date(timeValue).getTime();
-        if (!isNaN(parsedTime)) {
-          return formatRelativeTime(parsedTime);
-        }
+    if (isoDatePattern.test(timeValue) || timestampPattern.test(timeValue)) {
+      // 是日期格式或纯数字字符串，转换为时间戳
+      const parsedTime = new Date(timeValue).getTime();
+      if (!isNaN(parsedTime)) {
+        return formatRelativeTime(parsedTime);
       }
-      
-      // 否则直接返回自定义文本
-      return timeValue;
     }
+    
+    // 否则直接返回自定义文本
+    return timeValue;
   }
   
   return '';

@@ -20,10 +20,16 @@ export interface Activity {
   /** 支持字符串（向后兼容）或 IconConfig 对象 */
   icon: string | IconConfig;
   title: string;
-  /** 时间显示：可以是时间戳、ISO 日期字符串或自定义文本 */
+  /** 
+   * 时间配置：智能识别类型
+   * - 数字：视为时间戳（毫秒），自动计算相对时间
+   * - ISO 日期字符串：自动计算相对时间
+   * - 其他字符串：作为自定义文本直接显示
+   * @example 1702800000000 (时间戳)
+   * @example "2024-12-10T10:00:00Z" (ISO 日期)
+   * @example "上周" (自定义文本)
+   */
   time?: string | number;
-  /** 时间戳（毫秒）或 ISO 日期字符串，用于自动计算相对时间（优先级高于 time） */
-  timestamp?: number | string;
 }
 
 export interface Skill {
