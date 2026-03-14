@@ -18,7 +18,12 @@ export interface UptimeKumaData {
   uptimeList: Record<string, number>;
 }
 
-export function useUptimeKuma() {
+export interface UptimeKumaConfig {
+  url: string;
+  slug: string;
+}
+
+export function useUptimeKuma(overrideConfig?: UptimeKumaConfig) {
   const monitors = ref<MonitorStatus[]>([]);
   const loading = ref(true);
   const error = ref<string | null>(null);
@@ -29,13 +34,16 @@ export function useUptimeKuma() {
 
   const fetchStatus = async () => {
     loading.value = true;
-    if (!siteConfig.uptimeKuma) {
+    // 使用传入的配置或 siteConfig 中的配置
+    const config = overrideConfig || (siteConfig as any).uptimeKuma;
+    
+    if (!config) {
       loading.value = false;
       return;
     }
 
     try {
-      const { url, slug } = siteConfig.uptimeKuma;
+      const { url, slug } = config;
       const baseUrl = url.replace(/\/+$/, '');
 
       // 1. Fetch Status Page Config (Monitor List)

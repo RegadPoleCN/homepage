@@ -139,10 +139,6 @@
       "customBackground": true
     }
   ],
-  "uptimeKuma": {
-    "url": "https://status.example.com",
-    "slug": "index"
-  },
   "rightPanel": {
     "enableOrderConfig": true,
     "sections": [
@@ -173,6 +169,14 @@
             "description": "在线简历"
           }
         ]
+      },
+      {
+        "type": "uptimeKuma",
+        "enabled": true,
+        "title": "服务状态",
+        "icon": "mdi:server-heartbeat",
+        "url": "https://status.example.com",
+        "slug": "index"
       },
       {
         "type": "activities",

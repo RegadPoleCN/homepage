@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { useUptimeKuma } from '../composables/useUptimeKuma';
-import { siteConfig } from '../config/site.config';
 
-const { monitors, loading, overallStatus, error, lastUpdated, refresh } = useUptimeKuma();
+interface UptimeKumaConfig {
+  url: string;
+  slug: string;
+}
+
+const props = defineProps<{
+  config?: UptimeKumaConfig;
+}>();
+
+// 如果传入了 config，临时覆盖 siteConfig 中的配置
+const { monitors, loading, overallStatus, error, lastUpdated, refresh } = useUptimeKuma(props.config);
 
 const getStatusColor = (status: number) => {
   switch (status) {
@@ -50,7 +59,7 @@ const getOverallStatusIcon = () => {
 </script>
 
 <template>
-  <div v-if="siteConfig.uptimeKuma" class="content-card uptime-card">
+  <div v-if="config || true" class="content-card uptime-card">
     <div class="card-header">
       <div class="header-left">
         <Icon icon="mdi:server-network" class="header-icon" />

@@ -100,11 +100,24 @@ export interface PersonalWebsiteSection {
   items: PersonalWebsiteItem[];
 }
 
+export interface UptimeKumaSection {
+  type: 'uptimeKuma';
+  enabled: boolean;
+  title: string;
+  /** 支持字符串（向后兼容）或 IconConfig 对象 */
+  icon: string | IconConfig;
+  /** Uptime Kuma 状态页 URL */
+  url: string;
+  /** Uptime Kuma 状态页 slug */
+  slug: string;
+}
+
 export type RightPanelSection =
   | ActivitySection
   | SkillSection
   | ProjectSection
-  | PersonalWebsiteSection;
+  | PersonalWebsiteSection
+  | UptimeKumaSection;
 
 export interface ThemePreset {
   name: string;
@@ -142,10 +155,6 @@ export interface SiteConfig {
     /** 是否启用卡片顺序配置 */
     enableOrderConfig?: boolean;
     sections: RightPanelSection[];
-  };
-  uptimeKuma?: {
-    url: string;
-    slug: string;
   };
 }
 

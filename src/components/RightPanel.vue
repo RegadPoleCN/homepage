@@ -7,6 +7,7 @@ import type {
   SkillSection,
   ProjectSection,
   PersonalWebsiteSection,
+  UptimeKumaSection,
 } from '../config/site.config';
 import { formatRelativeTime } from '../utils/format';
 
@@ -18,6 +19,8 @@ const isSkillSection = (section: any): section is SkillSection => section.type =
 const isProjectSection = (section: any): section is ProjectSection => section.type === 'projects';
 const isPersonalWebsiteSection = (section: any): section is PersonalWebsiteSection =>
   section.type === 'personalWebsites';
+const isUptimeKumaSection = (section: any): section is UptimeKumaSection =>
+  section.type === 'uptimeKuma';
 
 /**
  * 获取活动的相对时间描述
@@ -131,10 +134,13 @@ function getActivityTime(item: any): string {
             <Icon icon="mdi:chevron-right" class="project-arrow" />
           </a>
         </div>
+
+        <!-- Uptime Kuma 状态 -->
+        <div v-else-if="isUptimeKumaSection(section)" class="uptime-section">
+          <UptimeCard :config="{ url: section.url, slug: section.slug }" />
+        </div>
       </div>
     </template>
-
-    <UptimeCard v-if="siteConfig.uptimeKuma" />
   </section>
 </template>
 
