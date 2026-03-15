@@ -1,73 +1,471 @@
 # Homepage - 现代化个人主页
 
-本项目由 Trae 使用 AI 协作开发，是一个基于 Vue 3 + TypeScript + Vite 构建的现代化、高性能个人主页。支持深度定制、多主题切换及实时服务监控。
+本项目基于ai编写,如有问题请在issue中指出,欢迎pr
 
-## 🚀 核心特性
+一个基于 Vue 3 + TypeScript + Vite 构建的现代化、高性能个人主页。支持深度定制、多主题切换及实时服务监控，完全由配置文件驱动，无需修改代码即可快速搭建专属个人主页。
 
-- **✨ 现代化 UI/UX**：基于玻璃拟态（Glassmorphism）风格设计，拥有流畅的进入动画与交互效果。
-- **🌓 深度主题系统**：内置 7 种精美主题预设，支持一键切换并实时持久化存储。
-- **📊 实时服务监控**：深度集成 [Uptime Kuma](https://uptime.kuma.pet/) API，实时展示服务在线率及 24 小时运行历史。
-- **📈 站点数据统计**：自动统计页面访问量（PV）并基于配置的起始时间实时计算站点运行天数。
-- **📱 完美移动端适配**：针对手机端进行深度优化，确保在各种屏幕尺寸下均能获得最佳浏览体验。
-- **⚙️ 全面配置驱动**：无需修改代码，通过 `src/config/site.config.json` 即可定制个人信息、社交链接、友链及监控项。
-- **⌨️ 开发者友好**：基于 TypeScript 编写，提供完善的类型检查与代码补全。
+![License](https://img.shields.io/badge/license-GPL--v3-blue.svg)
+![Vue](https://img.shields.io/badge/vue-3.x-green.svg)
+![TypeScript](https://img.shields.io/badge/typescript-latest-blue.svg)
+![Vite](https://img.shields.io/badge/vite-7.x-purple.svg)
+
+## 🌟 效果预览
+
+- **现代化设计**：玻璃拟态（Glassmorphism）风格，流畅的动画交互
+- **响应式布局**：完美适配手机、平板、桌面端
+- **多主题支持**：7 种精美主题一键切换
+- **实时监控**：集成 Uptime Kuma 展示服务状态
+- **智能图标**：自动识别图片链接或 Iconify 图标
+
+## 🚀 快速开始
+
+### 1. 克隆项目
+
+```bash
+git clone https://github.com/RegadPoleCN/homepage.git
+cd homepage
+```
+
+### 2. 安装依赖
+
+```bash
+pnpm install
+# 或使用
+npm install
+# 或使用
+yarn install
+```
+
+### 3. 配置个人信息
+
+编辑 `src/config/site.config.json` 文件，修改以下内容：
+
+```json
+{
+  "profile": {
+    "name": "你的名字",
+    "avatar": "你的头像 URL",
+    "bio": "一句话介绍自己",
+    "description": [
+      "这里是详细的个人简介，可以写多行内容。",
+      "介绍你的技能、兴趣爱好、工作经历等。"
+    ],
+    "socialLinks": [
+      {
+        "key": "github",
+        "icon": "mdi:github",
+        "title": "GitHub",
+        "url": "https://github.com/yourusername",
+        "target": "_blank"
+      }
+    ]
+  }
+}
+```
+
+### 4. 启动开发服务器
+
+```bash
+pnpm dev
+```
+
+访问 `http://localhost:5173` 预览效果。
+
+### 5. 生产环境构建
+
+```bash
+pnpm build
+```
+
+构建产物位于 `dist/` 目录，可直接部署到任意静态托管服务。
+
+---
+
+## 📖 配置指南
+
+所有配置都在 `src/config/site.config.json` 文件中完成。
+
+### 1. 个人信息 (Profile)
+
+```json
+"profile": {
+  "name": "你的名字",
+  "avatar": "https://avatars.githubusercontent.com/u/0?v=4",
+  "bio": "一句话介绍自己",
+  "description": [
+    "支持多行文本的简介内容",
+    "每行会自动换行显示"
+  ],
+  "socialLinks": [
+    {
+      "key": "github",
+      "icon": "mdi:github",          // 支持 Iconify 图标或图片 URL
+      "title": "GitHub",
+      "url": "https://github.com/yourusername",
+      "target": "_blank"              // _blank 新窗口打开，_self 当前窗口
+    },
+    {
+      "key": "email",
+      "icon": "mdi:email",
+      "title": "Email",
+      "url": "mailto:your@email.com",
+      "target": "_self"
+    }
+  ]
+}
+```
+
+**图标格式说明**：
+- **Iconify 图标**：`"mdi:github"`、`"logos:vue"` 等（推荐）
+- **图片链接**：`"https://example.com/icon.png"`
+- **对象格式**：`{ "src": "mdi:github" }`
+
+系统会**自动识别**图标类型并正确渲染。
+
+### 2. 友情链接 (Friend Links)
+
+```json
+"friendLinks": [
+  {
+    "name": "友链名称",
+    "url": "https://example.com",
+    "avatar": "https://example.com/avatar.png",
+    "description": "友链描述"
+  }
+]
+```
+
+### 3. 右栏区块配置 (Right Panel)
+
+右栏的所有区块都可以通过 `sections` 数组自由调整顺序：
+
+```json
+"rightPanel": {
+  "enableOrderConfig": true,
+  "sections": [
+    {
+      "type": "personalWebsites",    // 个人网站
+      "enabled": true,
+      "title": "个人网站",
+      "icon": "mdi:web",
+      "items": [
+        {
+          "name": "个人博客",
+          "url": "https://blog.example.com",
+          "icon": "logos:blogger",
+          "description": "我的技术博客"
+        }
+      ]
+    },
+    {
+      "type": "uptimeKuma",          // 服务监控
+      "enabled": true,
+      "title": "服务状态",
+      "icon": "mdi:server-heartbeat",
+      "url": "https://status.example.com",
+      "slug": "index"
+    },
+    {
+      "type": "activities",          // 最新动态
+      "enabled": true,
+      "title": "最新动态",
+      "icon": "mdi:post-outline",
+      "items": [
+        {
+          "icon": "mdi:code-braces",
+          "title": "开始了一个新项目",
+          "time": "2024-12-10T10:00:00Z"  // 智能时间识别
+        }
+      ]
+    },
+    {
+      "type": "skills",              // 技能专长
+      "enabled": true,
+      "title": "技能专长",
+      "icon": "mdi:lightbulb-on",
+      "items": [
+        {
+          "icon": "logos:vue",
+          "name": "Vue.js"
+        }
+      ]
+    },
+    {
+      "type": "projects",            // 精选项目
+      "enabled": true,
+      "title": "精选项目",
+      "icon": "mdi:folder-multiple",
+      "items": [
+        {
+          "icon": "logos:vue",
+          "name": "项目名称",
+          "description": "项目描述",
+          "url": "https://github.com/yourname/project"
+        }
+      ]
+    }
+  ]
+}
+```
+
+**调整顺序**：只需在 `sections` 数组中调整对象的顺序即可改变右栏卡片的显示顺序。
+
+**启用/禁用**：设置 `"enabled": false` 可隐藏对应区块。
+
+#### 3.1 智能时间格式 (Activities)
+
+`time` 字段支持多种格式，系统会**自动识别**：
+
+```json
+{
+  "icon": "mdi:rocket-launch",
+  "title": "即将发布新版本",
+  "time": "2026-12-31T23:59:59Z"    // ISO 日期字符串 → 自动计算相对时间
+}
+```
+
+```json
+{
+  "icon": "mdi:code-tags",
+  "title": "代码提交突破 1000 次",
+  "time": 1702800000000             // 时间戳（毫秒）→ 自动计算相对时间
+}
+```
+
+```json
+{
+  "icon": "mdi:trophy",
+  "title": "获得开源贡献奖",
+  "time": "上周"                     // 自定义文本 → 直接显示
+}
+```
+
+**支持的格式**：
+- **ISO 日期**：`"2024-12-10T10:00:00Z"` → "5 分钟前"、"2 小时前"
+- **时间戳**：`1702800000000` → "3 天前"、"1 个月前"
+- **自定义文本**：`"上周"`、`"2024 年 12 月"` → 直接显示
+- **未来时间**：自动显示为 "5 分钟后"、"2 小时后"
+
+#### 3.2 Uptime Kuma 配置
+
+```json
+{
+  "type": "uptimeKuma",
+  "enabled": true,
+  "title": "服务状态",
+  "icon": "mdi:server-heartbeat",
+  "url": "https://status.example.com",  // 你的 Uptime Kuma 状态页 URL
+  "slug": "index"                        // 状态页标识符
+}
+```
+
+**获取配置方法**：
+1. 部署 [Uptime Kuma](https://github.com/louislam/uptime-kuma)
+2. 创建公开状态页（Status Page）
+3. 复制状态页 URL 和 slug 填入配置
+
+### 4. 主题配置 (Themes)
+
+内置 7 种主题预设，用户可通过界面切换：
+
+```json
+"themes": [
+  {
+    "name": "浅色",
+    "key": "light",
+    "leftBg": "#e2e8f0",
+    "centerBg": "#f1f5f9",
+    "rightBg": "#f1f5f9",
+    "primaryColor": "#3b82f6",
+    "backgroundColor": "#f8fafc",
+    "textColor": "#1e293b",
+    "cardBackground": "#ffffff",
+    "accentColor": "#6366f1"
+  },
+  {
+    "name": "深色",
+    "key": "dark",
+    // ... 其他主题配置
+  }
+]
+```
+
+**自定义主题**：复制现有主题对象，修改颜色值并添加新的 `key` 即可。
+
+### 5. 页脚信息 (Footer)
+
+```json
+"footer": {
+  "icpBeian": "京 ICP 备 XXXXXXXX 号",
+  "gonganBeian": "京公网安备 XXXXXXXXXXX 号",
+  "gonganBeianCode": "XXXXXXXXXXX",
+  "copyright": "你的名字",
+  "startYear": 2024,
+  "siteStartDate": "2024-01-01"
+}
+```
+
+- `siteStartDate`：用于计算站点运行天数
+- `startYear`：版权起始年份
+
+---
 
 ## 🛠️ 技术栈
 
-- **框架**: [Vue 3 (Composition API)](https://vuejs.org/)
-- **状态管理**: [Pinia](https://pinia.vuejs.org/)
-- **构建工具**: [Vite 7](https://vitejs.dev/)
-- **工具库**: [VueUse](https://vueuse.org/)
-- **图标库**: [Iconify](https://iconify.design/)
-- **开发语言**: [TypeScript](https://www.typescriptlang.org/)
+| 技术 | 用途 | 版本 |
+|------|------|------|
+| [Vue 3](https://vuejs.org/) | 前端框架 | 3.x |
+| [TypeScript](https://www.typescriptlang.org/) | 开发语言 | Latest |
+| [Vite](https://vitejs.dev/) | 构建工具 | 7.x |
+| [Pinia](https://pinia.vuejs.org/) | 状态管理 | Latest |
+| [VueUse](https://vueuse.org/) | 工具库 | Latest |
+| [Iconify](https://iconify.design/) | 图标库 | Latest |
+
+---
 
 ## 📂 项目结构
 
-```text
+```
 src/
-├── assets/          # 静态资源 (图片、字体等)
-├── components/      # UI 组件
-│   ├── LeftSidebar.vue   # 个人基本信息侧边栏
-│   ├── CenterPanel.vue   # 核心内容区 (自我介绍、关于我)
-│   ├── RightPanel.vue    # 动态信息区 (监控卡片、友链)
-│   ├── UptimeCard.vue    # Uptime Kuma 监控组件
-│   ├── SiteStats.vue     # 站点统计组件 (PV、运行时长)
-│   └── SettingsModal.vue # 全局设置与主题切换
-├── composables/     # 逻辑封装 (主题控制、监控数据抓取等)
-├── config/          # 核心配置文件 (site.config.json)
-├── stores/          # Pinia 状态仓库 (主题状态等)
-├── App.vue          # 根容器与布局控制
-└── main.ts          # 入口文件
+├── assets/              # 静态资源（图片、字体等）
+├── components/          # UI 组件
+│   ├── LeftSidebar.vue       # 左侧边栏（个人信息）
+│   ├── CenterPanel.vue       # 中央内容区（关于我、朋友链接）
+│   ├── RightPanel.vue        # 右侧边栏（动态、技能、项目等）
+│   ├── SmartIcon.vue         # 智能图标组件（自动识别类型）
+│   ├── UptimeCard.vue        # Uptime Kuma 监控卡片
+│   └── SettingsModal.vue     # 设置弹窗（主题切换）
+├── composables/         # 组合式函数（逻辑复用）
+│   ├── useTheme.ts           # 主题控制
+│   └── useUptimeKuma.ts      # Uptime Kuma 数据抓取
+├── config/              # 配置文件
+│   ├── site.config.ts        # 配置类型定义
+│   └── site.config.json      # 主要配置文件
+├── stores/              # Pinia 状态仓库
+├── utils/               # 工具函数
+│   ├── icon.ts               # 图标类型识别
+│   └── format.ts             # 时间格式化
+├── App.vue              # 根组件
+└── main.ts              # 入口文件
 ```
 
-## ⚙️ 快速配置
+---
 
-编辑 `src/config/site.config.json` 即可快速上线：
-
-- **Profile**: 设置姓名、头像、简介。`description` 字段支持数组格式以实现**自动换行**。
-- **friendLinks**: 可扩展的友链列表
-- **Uptime Kuma**: 配置 `url` 和 `slug` 即可启用实时服务监控。
-- **Site Stats**: 设置 `siteStartDate`（格式：`YYYY-MM-DD`）来显示站点运行时间。
-- **Footer**: ICP 备案、公安备案及版权声明信息。
-
-## 🛠️ 开发与构建
+## ⌨️ 开发命令
 
 ### 安装依赖
 ```bash
 pnpm install
 ```
 
-### 启动开发环境
+### 启动开发服务器（热重载）
 ```bash
 pnpm dev
+```
+
+### 类型检查
+```bash
+pnpm type-check
 ```
 
 ### 生产环境构建
 ```bash
 pnpm build
 ```
-*注：构建产物默认使用相对路径 (`./`)，支持直接部署在子目录下。*
+
+### 预览构建结果
+```bash
+pnpm preview
+```
+
+**注意**：构建产物使用相对路径 (`./`)，支持直接部署在子目录下。
+
+---
+
+## 🚀 部署指南
+
+### 方式一：Vercel 部署
+
+1. 安装 Vercel CLI：
+   ```bash
+   npm i -g vercel
+   ```
+
+2. 在项目根目录执行：
+   ```bash
+   vercel
+   ```
+
+3. 按提示操作即可完成部署
+
+### 方式二：GitHub Pages
+
+1. 修改 `vite.config.ts` 中的 `base` 为你的仓库名：
+   ```typescript
+   base: '/your-repo-name/',
+   ```
+
+2. 构建项目：
+   ```bash
+   pnpm build
+   ```
+
+3. 将 `dist` 目录推送到 `gh-pages` 分支
+
+4. 在 GitHub 仓库设置中启用 GitHub Pages
+
+### 方式三：任意静态托管
+
+构建后的 `dist` 目录可部署到：
+- Nginx / Apache
+- Netlify
+- Cloudflare Pages
+- 阿里云 OSS
+- 腾讯云 COS
+
+---
+
+## ❓ 常见问题
+
+### Q: 如何更换图标？
+A: 在 [Iconify](https://icon-sets.iconify.design/) 网站搜索喜欢的图标，复制图标名称（如 `mdi:github`）填入配置的 `icon` 字段。
+
+### Q: 可以使用自己的图片作为图标吗？
+A: 可以！直接填入图片 URL 即可，系统会自动识别：
+```json
+"icon": "https://example.com/my-icon.png"
+```
+
+### Q: 如何让最新动态显示自定义文字而不是时间？
+A: 在 `time` 字段填入非日期格式的文本即可：
+```json
+"time": "上周"  // 或 "2024 年 12 月"、"昨天" 等
+```
+
+### Q: 如何隐藏某个右栏区块？
+A: 设置 `"enabled": false`：
+```json
+{
+  "type": "skills",
+  "enabled": false,  // 隐藏技能区块
+  "title": "技能专长"
+}
+```
+
+### Q: 如何调整右栏区块的顺序？
+A: 在 `rightPanel.sections` 数组中调整对象的顺序即可，排在前面的会先显示。
+
+### Q: 站点运行天数如何计算？
+A: 根据 `footer.siteStartDate` 配置自动计算，格式为 `YYYY-MM-DD`。
+
+---
 
 ## 📄 开源协议
 
 本项目采用 [GPL-v3](LICENSE) 协议开源。
+
+---
+
+## 📮 问题反馈
+
+如有问题或建议，欢迎提交 [Issue](https://github.com/RegadPoleCN/homepage/issues)。
