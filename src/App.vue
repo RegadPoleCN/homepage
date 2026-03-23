@@ -7,7 +7,7 @@ import CenterPanel from './components/CenterPanel.vue';
 import RightPanel from './components/RightPanel.vue';
 import Footer from './components/Footer.vue';
 import SettingsModal from './components/SettingsModal.vue';
-import GitHubBadge from './components/GitHubBadge.vue';
+
 import { useThemeStore } from './stores/theme';
 import { useScrollToTop } from './composables/useScrollToTop';
 
@@ -29,8 +29,6 @@ onMounted(() => {
     <button class="settings-btn" title="设置" @click="showSettings = true">
       <Icon icon="mdi:cog" />
     </button>
-
-    <GitHubBadge />
 
     <main class="main-layout">
       <aside class="left-column">

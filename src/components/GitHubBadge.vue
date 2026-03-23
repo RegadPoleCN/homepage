@@ -18,9 +18,8 @@ const githubUrl = 'https://github.com/RegadPoleCN/homepage';
 
 <style scoped>
 .github-badge {
-  position: fixed;
-  top: 1.5rem;
-  left: calc(260px + 1.5rem);
+  position: absolute;
+  margin: -20px;
   width: 60px;
   height: 60px;
   display: flex;
@@ -49,12 +48,6 @@ const githubUrl = 'https://github.com/RegadPoleCN/homepage';
 
 .github-badge:hover .github-icon {
   transform: rotate(-45deg) translate(-1px, -12px) scale(1.16);
-}
-
-@media (max-width: 1024px) {
-  .github-badge {
-    left: 1.5rem;
-  }
 }
 
 @media (max-width: 768px) {

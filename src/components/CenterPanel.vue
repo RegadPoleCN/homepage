@@ -4,6 +4,7 @@ import { Icon } from '@iconify/vue';
 import type { IconifyIcon } from '@iconify/vue';
 import { siteConfig } from '../config/site.config';
 import SiteStats from './SiteStats.vue';
+import GitHubBadge from './GitHubBadge.vue';
 
 const profile = siteConfig.profile;
 
@@ -25,6 +26,7 @@ function getIcon(icon: string | { src: string }): string | IconifyIcon {
 <template>
   <section class="center-panel">
     <div class="profile-card">
+      <GitHubBadge />
       <div class="avatar-wrapper">
         <img :src="profile.avatar" :alt="profile.name" class="avatar" />
       </div>
@@ -195,7 +197,7 @@ function getIcon(icon: string | { src: string }): string | IconifyIcon {
 }
 
 .description-line {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.2rem;
 }
 
 .description-line:last-child {
