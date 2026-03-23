@@ -31,10 +31,12 @@ export function isImageIcon(icon: string): boolean {
     return false;
   }
 
-  const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico'];
+  // const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico'];
+  const httpsIconPrefix = ['http://', 'https://'];
   const lowerCaseIcon = icon.toLowerCase();
 
-  return imageExtensions.some((ext) => lowerCaseIcon.endsWith(ext));
+  // return imageExtensions.some((ext) => lowerCaseIcon.endsWith(ext));
+  return httpsIconPrefix.some((prefix) => lowerCaseIcon.startsWith(prefix));
 }
 
 /**
