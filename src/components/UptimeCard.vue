@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { useUptimeKuma } from '../composables/useUptimeKuma';
+import Skeleton from './Skeleton.vue';
+import { ref, watch } from 'vue';
 
 interface UptimeKumaConfig {
   url: string;
@@ -11,8 +13,26 @@ const props = defineProps<{
   config?: UptimeKumaConfig;
 }>();
 
-// 如果传入了 config，临时覆盖 siteConfig 中的配置
-const { monitors, loading, overallStatus, error, lastUpdated, refresh } = useUptimeKuma(props.config);
+const { monitors, loading, overallStatus, error, lastUpdated, refresh } = useUptimeKuma(
+  props.config
+);
+
+const retryCount = ref(0);
+const maxRetries = 3;
+
+const handleRetry = async () => {
+  retryCount.value++;
+  await refresh();
+  if (error.value && retryCount.value >= maxRetries) {
+    console.warn(`已达到最大重试次数 (${maxRetries})，请检查网络或 Uptime Kuma 配置`);
+  }
+};
+
+watch(error, () => {
+  if (error.value) {
+    retryCount.value = 0;
+  }
+});
 
 const getStatusColor = (status: number) => {
   switch (status) {
@@ -70,9 +90,9 @@ const getOverallStatusIcon = () => {
         :class="{ loading: loading }"
         :disabled="loading"
         title="手动刷新"
-        @click="refresh"
+        @click="handleRetry"
       >
-        <Icon icon="mdi:refresh" />
+        <Icon :icon="loading ? 'mdi:loading' : 'mdi:refresh'" :class="{ spin: loading }" />
       </button>
     </div>
 
@@ -87,17 +107,22 @@ const getOverallStatusIcon = () => {
     <div class="card-content">
       <div v-if="loading && !monitors.length" class="loading-state">
         <div class="skeleton-list">
-          <div v-for="i in 3" :key="i" class="skeleton-item"></div>
+          <div v-for="i in 3" :key="i" class="skeleton-item-wrapper">
+            <Skeleton variant="rounded" height="36px" class="skeleton-item" />
+          </div>
         </div>
       </div>
 
       <div v-else-if="error && !monitors.length" class="error-state">
         <div class="error-content">
           <Icon icon="mdi:alert-rhombus-outline" class="error-icon" />
-          <p>{{ error }}</p>
-          <button class="retry-btn" @click="refresh">
-            <Icon icon="mdi:reload" />
-            重试
+          <p class="error-message">{{ error }}</p>
+          <p v-if="retryCount > 0" class="retry-count">
+            已重试 {{ retryCount }}/{{ maxRetries }} 次
+          </p>
+          <button class="retry-btn" :disabled="loading" @click="handleRetry">
+            <Icon :icon="loading ? 'mdi:loading' : 'mdi:reload'" :class="{ spin: loading }" />
+            {{ loading ? '重试中...' : '重试' }}
           </button>
         </div>
       </div>
@@ -238,26 +263,14 @@ const getOverallStatusIcon = () => {
   gap: 0.75rem;
 }
 
-.skeleton-item {
-  height: 36px;
-  background: linear-gradient(
-    90deg,
-    rgba(128, 128, 128, 0.05) 25%,
-    rgba(128, 128, 128, 0.1) 50%,
-    rgba(128, 128, 128, 0.05) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
+.skeleton-item-wrapper {
+  padding: 0.5rem;
+  background: rgba(128, 128, 128, 0.05);
   border-radius: 10px;
 }
 
-@keyframes skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+.skeleton-item {
+  width: 100%;
 }
 
 .error-state {
@@ -278,11 +291,18 @@ const getOverallStatusIcon = () => {
   opacity: 0.8;
 }
 
-.error-state p {
+.error-message {
   margin: 0;
   font-size: 0.875rem;
   color: var(--text-color);
   opacity: 0.7;
+}
+
+.retry-count {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-color);
+  opacity: 0.5;
 }
 
 .empty-state {
