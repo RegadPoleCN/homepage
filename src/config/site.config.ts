@@ -20,7 +20,7 @@ export interface Activity {
   /** 支持字符串（向后兼容）或 IconConfig 对象 */
   icon: string | IconConfig;
   title: string;
-  /** 
+  /**
    * 时间配置：智能识别类型
    * - 数字：视为时间戳（毫秒），自动计算相对时间
    * - ISO 日期字符串：自动计算相对时间
@@ -134,12 +134,28 @@ export interface ThemePreset {
 }
 
 export interface SiteConfig {
+  site: {
+    /** 站点标题模板，支持 {name} 变量 */
+    title: string;
+    /** 站点域名 */
+    domain: string;
+  };
   profile: {
     name: string;
     avatar: string;
     bio: string;
+    /** 职业/职位（可选） */
+    occupation?: string;
     description: string | string[];
     socialLinks: SocialLink[];
+    /** SEO 配置（可选，向后兼容） */
+    seo?: {
+      title: string;
+      description: string;
+      keywords: string;
+      author: string;
+      ogImage: string;
+    };
   };
   friendLinks: FriendLink[];
   footer: {

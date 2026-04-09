@@ -1,12 +1,24 @@
 {
+  "site": {
+    "title": "{name} - 个人主页",
+    "domain": "https://your-domain.com"
+  },
   "profile": {
     "name": "你的名字",
     "avatar": "https://avatars.githubusercontent.com/u/0?v=4",
     "bio": "一句话介绍自己",
+    "occupation": "你的职业/职位",
     "description": [
       "这里是详细的个人简介，可以写多行内容。",
       "介绍你的技能、兴趣爱好、工作经历等。"
     ],
+    "seo": {
+      "title": "个人主页 | 你的名字",
+      "description": "欢迎来到我的个人主页，这里展示我的技能、项目和经历。",
+      "keywords": "个人主页，开发者，前端，技术博客",
+      "author": "你的名字",
+      "ogImage": "https://avatars.githubusercontent.com/u/0?v=4"
+    },
     "socialLinks": [
       {
         "key": "github",
