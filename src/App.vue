@@ -18,6 +18,16 @@ const { isLaunching, scrollToTop } = useScrollToTop();
 const showSettings = ref(false);
 const showBackToTop = computed(() => y.value > 500);
 
+const mainContentId = 'main-content';
+
+const handleSkipToContent = () => {
+  const mainContent = document.getElementById(mainContentId);
+  if (mainContent) {
+    mainContent.focus();
+    mainContent.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
 onMounted(() => {
   themeStore.initTheme();
 });
@@ -25,35 +35,40 @@ onMounted(() => {
 
 <template>
   <div class="app-container">
-    <!-- Fixed Settings Button at root level -->
-    <button class="settings-btn" title="设置" @click="showSettings = true">
-      <Icon icon="mdi:cog" />
+    <a href="#main-content" class="skip-link" @click.prevent="handleSkipToContent">
+      跳到主要内容
+    </a>
+
+    <button class="settings-btn" title="设置" aria-label="打开设置" @click="showSettings = true">
+      <Icon icon="mdi:cog" aria-hidden="true" />
     </button>
 
-    <main class="main-layout">
-      <aside class="left-column">
+    <GitHubBadge />
+
+    <main id="main-content" class="main-layout" role="main" tabindex="-1">
+      <aside class="left-column" role="complementary" aria-label="左侧边栏">
         <LeftSidebar />
       </aside>
       <div class="center-column">
         <CenterPanel />
         <Footer class="desktop-footer" />
       </div>
-      <aside class="right-column">
+      <aside class="right-column" role="complementary" aria-label="右侧边栏">
         <RightPanel />
       </aside>
     </main>
 
     <Footer class="mobile-footer" />
 
-    <!-- Back to Top Button with internal animation -->
     <button
       class="back-to-top-btn"
       :class="{ visible: showBackToTop, launching: isLaunching }"
       title="回到顶部"
+      aria-label="返回顶部"
       @click="scrollToTop"
     >
       <div class="rocket-wrapper">
-        <Icon icon="mdi:rocket-launch" class="rocket-icon" />
+        <Icon icon="mdi:rocket-launch" class="rocket-icon" aria-hidden="true" />
       </div>
     </button>
 
@@ -62,6 +77,26 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  z-index: 9999;
+  transition: top 0.3s;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 4px 0;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
 .app-container {
   height: 100vh;
   overflow: hidden;
