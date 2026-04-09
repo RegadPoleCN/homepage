@@ -3,6 +3,15 @@ import { Icon } from '@iconify/vue';
 import { siteConfig } from '../config/site.config';
 
 const friendLinks = siteConfig.friendLinks;
+
+const defaultAvatar = 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=64';
+
+function handleImageError(event: Event) {
+  const target = event.target;
+  if (target && 'src' in target && target.src !== defaultAvatar) {
+    target.src = defaultAvatar;
+  }
+}
 </script>
 
 <template>
@@ -21,7 +30,14 @@ const friendLinks = siteConfig.friendLinks;
           rel="noopener noreferrer"
           class="friend-link"
         >
-          <img v-if="link.avatar" :src="link.avatar" :alt="link.name" class="friend-avatar" />
+          <img
+            v-if="link.avatar"
+            :src="link.avatar"
+            :alt="link.name"
+            class="friend-avatar"
+            loading="lazy"
+            @error="handleImageError"
+          />
           <div class="friend-info">
             <span class="friend-name">{{ link.name }}</span>
             <span v-if="link.description" class="friend-desc">{{ link.description }}</span>

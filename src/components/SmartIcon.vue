@@ -9,6 +9,16 @@ const props = defineProps<{
   size?: string | number;
 }>();
 
+const defaultIcon =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ccc"%3E%3Crect width="24" height="24" rx="4"/%3E%3C/svg%3E';
+
+function handleImageError(event: Event) {
+  const target = event.target;
+  if (target && 'src' in target && target.src !== defaultIcon) {
+    target.src = defaultIcon;
+  }
+}
+
 /**
  * 解析图标配置，返回图标字符串
  */
@@ -51,6 +61,8 @@ const iconClass = computed(() => {
       height: typeof size === 'number' ? `${size}px` : size,
     }"
     alt="icon"
+    loading="lazy"
+    @error="handleImageError"
   />
 
   <!-- Iconify 图标库类型 -->

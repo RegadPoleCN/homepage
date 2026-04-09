@@ -8,6 +8,15 @@ import GitHubBadge from './GitHubBadge.vue';
 
 const profile = siteConfig.profile;
 
+const defaultAvatar = 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=128';
+
+function handleImageError(event: Event) {
+  const target = event.target;
+  if (target && 'src' in target && target.src !== defaultAvatar) {
+    target.src = defaultAvatar;
+  }
+}
+
 const socialLinks = computed(() => {
   return profile.socialLinks.filter((link) => link.url);
 });
@@ -28,7 +37,13 @@ function getIcon(icon: string | { src: string }): string | IconifyIcon {
     <div class="profile-card">
       <GitHubBadge />
       <div class="avatar-wrapper">
-        <img :src="profile.avatar" :alt="profile.name" class="avatar" />
+        <img
+          :src="profile.avatar"
+          :alt="profile.name"
+          class="avatar"
+          loading="lazy"
+          @error="handleImageError"
+        />
       </div>
       <h1 class="name">{{ profile.name }}</h1>
       <p class="bio">{{ profile.bio }}</p>
