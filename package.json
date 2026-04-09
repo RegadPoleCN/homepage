@@ -44,6 +44,8 @@
     "terser": "^5.46.1",
     "typescript": "~5.9.3",
     "vite": "^7.3.1",
+    "vite-plugin-pwa": "^1.2.0",
+    "vite-plugin-sitemap": "^0.8.2",
     "vue-eslint-parser": "^10.4.0",
     "vue-tsc": "^3.2.6"
   }
