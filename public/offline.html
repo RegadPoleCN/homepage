@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>离线 - Homepage</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+    }
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 500px;
+    }
+
+    .icon {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.875rem 2rem;
+      background-color: #ffffff;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .status {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">📡</div>
+    <h1>您已离线</h1>
+    <p>
+      当前无法连接到网络。<br>
+      请检查您的网络连接后重试。
+    </p>
+    <a href="./" class="btn">返回首页</a>
+    <div class="status">
+      提示：本网站支持 PWA，首次加载后可离线访问部分内容
+    </div>
+  </div>
+
+  <script>
+    // 监听网络状态变化
+    window.addEventListener('online', () => {
+      if (navigator.onLine) {
+        setTimeout(() => {
+          window.location.href = './';
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+</html>
