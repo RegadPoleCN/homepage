@@ -151,6 +151,25 @@ export function generateKeywords(config: SiteConfig): string {
   const { profile, rightPanel } = config;
   const keywords = new Set<string>();
 
+  if (profile.keywords) {
+    profile.keywords.forEach((keyword) => {
+      const cleaned = keyword.trim().toLowerCase();
+      if (cleaned && !STOP_WORDS.has(cleaned)) {
+        keywords.add(cleaned);
+      }
+    });
+  }
+
+  if (profile.name) {
+    const nameWords = profile.name.split(/[\s,，,./]+/);
+    nameWords.forEach((word) => {
+      const cleaned = word.trim().toLowerCase();
+      if (cleaned && !STOP_WORDS.has(cleaned) && cleaned.length > 1) {
+        keywords.add(cleaned);
+      }
+    });
+  }
+
   if (profile.occupation) {
     const occupationWords = profile.occupation.split(/[\s,，,./、]+/);
     occupationWords.forEach((word) => {
@@ -173,16 +192,6 @@ export function generateKeywords(config: SiteConfig): string {
         }
       });
     }
-  }
-
-  if (profile.name) {
-    const nameWords = profile.name.split(/[\s,，,./]+/);
-    nameWords.forEach((word) => {
-      const cleaned = word.trim().toLowerCase();
-      if (cleaned && !STOP_WORDS.has(cleaned) && cleaned.length > 1) {
-        keywords.add(cleaned);
-      }
-    });
   }
 
   const keywordsArray = Array.from(keywords);

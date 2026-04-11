@@ -147,15 +147,9 @@ export interface SiteConfig {
     /** 职业/职位（可选） */
     occupation?: string;
     description: string | string[];
+    /** 手动添加的关键词（可选） */
+    keywords?: string[];
     socialLinks: SocialLink[];
-    /** SEO 配置（可选，向后兼容） */
-    seo?: {
-      title: string;
-      description: string;
-      keywords: string;
-      author: string;
-      ogImage: string;
-    };
   };
   friendLinks: FriendLink[];
   footer: {
