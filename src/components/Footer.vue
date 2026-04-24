@@ -16,7 +16,7 @@ const yearRange = computed(() => {
 </script>
 
 <template>
-  <footer class="site-footer">
+  <footer class="site-footer" role="contentinfo">
     <div class="footer-content">
       <SiteStats class="mobile-stats" />
       <div class="beian-info">
@@ -26,8 +26,9 @@ const yearRange = computed(() => {
           target="_blank"
           rel="noopener noreferrer"
           class="beian-link"
+          :aria-label="`ICP备案号：${footer.icpBeian}`"
         >
-          <Icon icon="mdi:shield-check" />
+          <Icon icon="mdi:shield-check" aria-hidden="true" />
           {{ footer.icpBeian }}
         </a>
         <a
@@ -36,13 +37,14 @@ const yearRange = computed(() => {
           target="_blank"
           rel="noopener noreferrer"
           class="beian-link"
+          :aria-label="`公安备案号：${footer.gonganBeian}`"
         >
-          <Icon icon="mdi:police-badge" />
+          <Icon icon="mdi:police-badge" aria-hidden="true" />
           {{ footer.gonganBeian }}
         </a>
       </div>
       <div class="copyright">
-        <Icon icon="mdi:copyright" />
+        <Icon icon="mdi:copyright" aria-hidden="true" />
         <span>{{ yearRange }} {{ footer.copyright }}. All Rights Reserved.</span>
       </div>
     </div>

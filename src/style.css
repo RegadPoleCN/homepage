@@ -86,6 +86,24 @@ img {
 
 button {
   font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button:active,
+a:active,
+[role='button']:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+.scroll-container,
+.left-column,
+.center-column,
+.right-column,
+.modal-body {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 #app {
@@ -138,4 +156,35 @@ select:focus-visible {
 
 *:focus:not(:focus-visible) {
   outline: none;
+}
+
+@media (forced-colors: active) {
+  *:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px CanvasText;
+  }
+
+  .skip-link:focus {
+    outline: 2px solid Highlight;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

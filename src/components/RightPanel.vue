@@ -3,23 +3,27 @@ import UptimeCard from './UptimeCard.vue';
 import SmartIcon from './SmartIcon.vue';
 import { siteConfig } from '../config/site.config';
 import type {
+  Activity,
   ActivitySection,
   SkillSection,
   ProjectSection,
   PersonalWebsiteSection,
+  RightPanelSection,
   UptimeKumaSection,
 } from '../config/site.config';
 import { formatRelativeTime } from '../utils/format';
 
 const rightPanelSections = siteConfig.rightPanel.sections;
 
-const isActivitySection = (section: any): section is ActivitySection =>
+const isActivitySection = (section: RightPanelSection): section is ActivitySection =>
   section.type === 'activities';
-const isSkillSection = (section: any): section is SkillSection => section.type === 'skills';
-const isProjectSection = (section: any): section is ProjectSection => section.type === 'projects';
-const isPersonalWebsiteSection = (section: any): section is PersonalWebsiteSection =>
+const isSkillSection = (section: RightPanelSection): section is SkillSection =>
+  section.type === 'skills';
+const isProjectSection = (section: RightPanelSection): section is ProjectSection =>
+  section.type === 'projects';
+const isPersonalWebsiteSection = (section: RightPanelSection): section is PersonalWebsiteSection =>
   section.type === 'personalWebsites';
-const isUptimeKumaSection = (section: any): section is UptimeKumaSection =>
+const isUptimeKumaSection = (section: RightPanelSection): section is UptimeKumaSection =>
   section.type === 'uptimeKuma';
 
 /**
@@ -30,24 +34,24 @@ const isUptimeKumaSection = (section: any): section is UptimeKumaSection =>
  * - 纯数字字符串：转换为时间戳后计算
  * - 其他字符串：作为自定义文本直接显示
  */
-function getActivityTime(item: any): string {
+function getActivityTime(item: Activity): string {
   const timeValue = item.time;
-  
+
   if (timeValue === undefined || timeValue === null) {
     return '';
   }
-  
+
   // 如果是数字，认为是时间戳，自动计算相对时间
   if (typeof timeValue === 'number') {
     return formatRelativeTime(timeValue);
   }
-  
+
   // 如果是字符串，尝试解析为日期
   if (typeof timeValue === 'string') {
     // 检查是否为 ISO 日期格式或纯数字字符串
     const isoDatePattern = /^\d{4}-\d{2}-\d{2}/;
     const timestampPattern = /^\d+$/;
-    
+
     if (isoDatePattern.test(timeValue) || timestampPattern.test(timeValue)) {
       // 是日期格式或纯数字字符串，转换为时间戳
       const parsedTime = new Date(timeValue).getTime();
@@ -55,27 +59,31 @@ function getActivityTime(item: any): string {
         return formatRelativeTime(parsedTime);
       }
     }
-    
+
     // 否则直接返回自定义文本
     return timeValue;
   }
-  
+
   return '';
 }
 </script>
 
 <template>
-  <section class="right-panel">
+  <section class="right-panel" aria-label="右侧面板内容">
     <!-- 右栏区块 -->
     <template v-for="section in rightPanelSections" :key="section.type">
       <div v-if="section.enabled" class="content-card">
         <div class="card-header">
-          <SmartIcon :icon="section.icon" class="header-icon" />
+          <SmartIcon :icon="section.icon" class="header-icon" aria-hidden="true" />
           <h2>{{ section.title }}</h2>
         </div>
 
         <!-- 个人网站列表 -->
-        <div v-if="isPersonalWebsiteSection(section)" class="websites-list">
+        <nav
+          v-if="isPersonalWebsiteSection(section)"
+          class="websites-list"
+          :aria-label="`${section.title}列表`"
+        >
           <a
             v-for="(item, index) in section.items"
             :key="index"
@@ -83,6 +91,7 @@ function getActivityTime(item: any): string {
             class="website-item"
             target="_blank"
             rel="noopener noreferrer"
+            :aria-label="`访问${item.name}${item.description ? ' - ' + item.description : ''}`"
           >
             <div class="website-icon">
               <SmartIcon :icon="item.icon" size="24" />
@@ -91,9 +100,9 @@ function getActivityTime(item: any): string {
               <span class="website-name">{{ item.name }}</span>
               <span v-if="item.description" class="website-desc">{{ item.description }}</span>
             </div>
-            <Icon icon="mdi:chevron-right" class="website-arrow" />
+            <Icon icon="mdi:chevron-right" class="website-arrow" aria-hidden="true" />
           </a>
-        </div>
+        </nav>
 
         <!-- 活动列表 -->
         <div v-else-if="isActivitySection(section)" class="card-content">
@@ -117,12 +126,17 @@ function getActivityTime(item: any): string {
         </div>
 
         <!-- 项目列表 -->
-        <div v-else-if="isProjectSection(section)" class="projects-list">
+        <nav
+          v-else-if="isProjectSection(section)"
+          class="projects-list"
+          :aria-label="`${section.title}列表`"
+        >
           <a
             v-for="(item, index) in section.items"
             :key="index"
             :href="item.url"
             class="project-item"
+            :aria-label="`查看${item.name}项目${item.description ? ' - ' + item.description : ''}`"
           >
             <div class="project-icon">
               <SmartIcon :icon="item.icon" size="24" />
@@ -131,9 +145,9 @@ function getActivityTime(item: any): string {
               <span class="project-name">{{ item.name }}</span>
               <span class="project-desc">{{ item.description }}</span>
             </div>
-            <Icon icon="mdi:chevron-right" class="project-arrow" />
+            <Icon icon="mdi:chevron-right" class="project-arrow" aria-hidden="true" />
           </a>
-        </div>
+        </nav>
 
         <!-- Uptime Kuma 状态 -->
         <div v-else-if="isUptimeKumaSection(section)" class="uptime-section">
@@ -207,11 +221,12 @@ import { Icon } from '@iconify/vue';
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.75rem;
+  padding: 0.875rem;
   border-radius: 10px;
   background: rgba(128, 128, 128, 0.08);
   text-decoration: none;
   transition: all 0.2s ease;
+  min-height: 44px;
 }
 
 .website-item:hover {
@@ -272,10 +287,11 @@ import { Icon } from '@iconify/vue';
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.75rem;
+  padding: 0.875rem;
   border-radius: 10px;
   background: rgba(128, 128, 128, 0.08);
   transition: background 0.2s ease;
+  min-height: 44px;
 }
 
 .activity-item:hover {
@@ -324,12 +340,13 @@ import { Icon } from '@iconify/vue';
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1.125rem;
   border-radius: 20px;
   background: rgba(128, 128, 128, 0.1);
   font-size: 0.875rem;
   color: var(--text-color);
   transition: all 0.2s ease;
+  min-height: 44px;
 }
 
 .skill-tag:hover {
@@ -354,6 +371,7 @@ import { Icon } from '@iconify/vue';
   background: rgba(128, 128, 128, 0.08);
   text-decoration: none;
   transition: all 0.2s ease;
+  min-height: 44px;
 }
 
 .project-item:hover {

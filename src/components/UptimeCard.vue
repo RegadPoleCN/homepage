@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { useUptimeKuma } from '../composables/useUptimeKuma';
-import Skeleton from './Skeleton.vue';
+import LoadingSpinner from './LoadingSpinner.vue';
 import { ref, watch } from 'vue';
 
 interface UptimeKumaConfig {
@@ -79,26 +79,40 @@ const getOverallStatusIcon = () => {
 </script>
 
 <template>
-  <div v-if="config || true" class="content-card uptime-card">
+  <div
+    v-if="config || true"
+    class="content-card uptime-card"
+    role="region"
+    aria-label="服务状态监控"
+  >
     <div class="card-header">
       <div class="header-left">
-        <Icon icon="mdi:server-network" class="header-icon" />
+        <Icon icon="mdi:server-network" class="header-icon" aria-hidden="true" />
         <h2>服务状态</h2>
       </div>
       <button
         class="refresh-btn"
         :class="{ loading: loading }"
         :disabled="loading"
+        aria-label="刷新服务状态"
         title="手动刷新"
         @click="handleRetry"
       >
-        <Icon :icon="loading ? 'mdi:loading' : 'mdi:refresh'" :class="{ spin: loading }" />
+        <Icon
+          :icon="loading ? 'mdi:loading' : 'mdi:refresh'"
+          :class="{ spin: loading }"
+          aria-hidden="true"
+        />
       </button>
     </div>
 
     <div v-if="!loading || monitors.length" class="status-summary">
-      <div class="status-badge" :class="overallStatus">
-        <Icon :icon="getOverallStatusIcon()" :class="{ spin: loading && !monitors.length }" />
+      <div class="status-badge" :class="overallStatus" role="status" aria-live="polite">
+        <Icon
+          :icon="getOverallStatusIcon()"
+          :class="{ spin: loading && !monitors.length }"
+          aria-hidden="true"
+        />
         <span>{{ getOverallStatusText() }}</span>
       </div>
       <span v-if="lastUpdated" class="last-updated">更新于 {{ lastUpdated }}</span>
@@ -106,22 +120,27 @@ const getOverallStatusIcon = () => {
 
     <div class="card-content">
       <div v-if="loading && !monitors.length" class="loading-state">
-        <div class="skeleton-list">
-          <div v-for="i in 3" :key="i" class="skeleton-item-wrapper">
-            <Skeleton variant="rounded" height="36px" class="skeleton-item" />
-          </div>
-        </div>
+        <LoadingSpinner size="small" text="正在加载服务状态..." />
       </div>
 
       <div v-else-if="error && !monitors.length" class="error-state">
         <div class="error-content">
-          <Icon icon="mdi:alert-rhombus-outline" class="error-icon" />
+          <Icon icon="mdi:alert-rhombus-outline" class="error-icon" aria-hidden="true" />
           <p class="error-message">{{ error }}</p>
           <p v-if="retryCount > 0" class="retry-count">
             已重试 {{ retryCount }}/{{ maxRetries }} 次
           </p>
-          <button class="retry-btn" :disabled="loading" @click="handleRetry">
-            <Icon :icon="loading ? 'mdi:loading' : 'mdi:reload'" :class="{ spin: loading }" />
+          <button
+            class="retry-btn"
+            :disabled="loading"
+            aria-label="重新加载服务状态"
+            @click="handleRetry"
+          >
+            <Icon
+              :icon="loading ? 'mdi:loading' : 'mdi:reload'"
+              :class="{ spin: loading }"
+              aria-hidden="true"
+            />
             {{ loading ? '重试中...' : '重试' }}
           </button>
         </div>
@@ -162,7 +181,7 @@ const getOverallStatusIcon = () => {
       </div>
 
       <div v-else class="empty-state">
-        <Icon icon="mdi:server-off" class="empty-icon" />
+        <Icon icon="mdi:server-off" class="empty-icon" aria-hidden="true" />
         <p>未发现监控项</p>
       </div>
     </div>

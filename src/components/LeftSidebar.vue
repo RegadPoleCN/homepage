@@ -15,13 +15,13 @@ function handleImageError(event: Event) {
 </script>
 
 <template>
-  <aside class="left-sidebar">
+  <aside class="left-sidebar" aria-label="友情链接区域">
     <div class="sidebar-content">
       <div class="sidebar-header">
-        <Icon icon="mdi:link-variant" class="header-icon" />
+        <Icon icon="mdi:link-variant" class="header-icon" aria-hidden="true" />
         <h3>友情链接</h3>
       </div>
-      <div class="friend-links">
+      <nav class="friend-links" aria-label="友情链接列表">
         <a
           v-for="link in friendLinks"
           :key="link.url"
@@ -29,6 +29,7 @@ function handleImageError(event: Event) {
           target="_blank"
           rel="noopener noreferrer"
           class="friend-link"
+          :aria-label="`访问${link.name}的网站${link.description ? ' - ' + link.description : ''}`"
         >
           <img
             v-if="link.avatar"
@@ -43,7 +44,7 @@ function handleImageError(event: Event) {
             <span v-if="link.description" class="friend-desc">{{ link.description }}</span>
           </div>
         </a>
-      </div>
+      </nav>
     </div>
   </aside>
 </template>
@@ -99,12 +100,13 @@ function handleImageError(event: Event) {
 .friend-link {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.375rem;
+  gap: 0.75rem;
+  padding: 0.75rem;
   border-radius: 8px;
   text-decoration: none;
   transition: all 0.2s ease;
   background: rgba(128, 128, 128, 0.08);
+  min-height: 44px;
 }
 
 .friend-link:hover {

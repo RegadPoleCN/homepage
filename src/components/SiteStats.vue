@@ -6,16 +6,16 @@ const { runtime } = useSiteStats();
 </script>
 
 <template>
-  <div class="stats-card">
+  <div class="stats-card" role="region" aria-label="站点统计信息">
     <div id="busuanzi_container_site_pv" class="stats-item">
-      <Icon icon="mdi:eye" class="stats-icon" />
+      <Icon icon="mdi:eye" class="stats-icon" aria-hidden="true" />
       <span class="stats-label">全站访问量</span>
-      <span id="busuanzi_site_pv" class="stats-value">--</span>
+      <span id="busuanzi_site_pv" class="stats-value" aria-live="polite">--</span>
     </div>
     <div class="stats-item">
-      <Icon icon="mdi:clock-outline" class="stats-icon" />
+      <Icon icon="mdi:clock-outline" class="stats-icon" aria-hidden="true" />
       <span class="stats-label">已稳定运行</span>
-      <span class="stats-value">{{ runtime }}</span>
+      <span class="stats-value" aria-live="polite">{{ runtime }}</span>
     </div>
   </div>
 </template>

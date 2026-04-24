@@ -33,13 +33,13 @@ function getIcon(icon: string | { src: string }): string | IconifyIcon {
 </script>
 
 <template>
-  <section class="center-panel">
+  <section class="center-panel" aria-label="个人资料和介绍">
     <div class="profile-card">
       <GitHubBadge />
       <div class="avatar-wrapper">
         <img
           :src="profile.avatar"
-          :alt="profile.name"
+          :alt="`${profile.name}的头像`"
           class="avatar"
           loading="lazy"
           @error="handleImageError"
@@ -47,7 +47,7 @@ function getIcon(icon: string | { src: string }): string | IconifyIcon {
       </div>
       <h1 class="name">{{ profile.name }}</h1>
       <p class="bio">{{ profile.bio }}</p>
-      <div class="social-links">
+      <nav class="social-links" aria-label="社交链接">
         <a
           v-for="link in socialLinks"
           :key="link.key"
@@ -55,15 +55,16 @@ function getIcon(icon: string | { src: string }): string | IconifyIcon {
           :target="link.key === 'email' ? '_self' : '_blank'"
           rel="noopener noreferrer"
           class="social-link"
+          :aria-label="link.title"
           :title="link.title"
         >
-          <Icon :icon="getIcon(link.icon)" />
+          <Icon :icon="getIcon(link.icon)" aria-hidden="true" />
         </a>
-      </div>
+      </nav>
     </div>
     <div class="description-card">
       <h2>
-        <Icon icon="mdi:account-details" class="section-icon" />
+        <Icon icon="mdi:account-details" class="section-icon" aria-hidden="true" />
         关于我
       </h2>
       <div class="description">

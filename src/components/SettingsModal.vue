@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { ref, toRef } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useThemeStore } from '../stores/theme';
 import { storeToRefs } from 'pinia';
+import { useFocusTrap } from '../composables/useFocusTrap';
 
-defineProps<{
+const props = defineProps<{
   visible: boolean;
 }>();
 
@@ -14,6 +16,11 @@ const emit = defineEmits<{
 const themeStore = useThemeStore();
 const { themes, currentThemeKey, customBackgroundUrl, isCustomTheme } = storeToRefs(themeStore);
 const { setTheme, setCustomBackground } = themeStore;
+
+const modalContentRef = ref<HTMLElement | null>(null);
+const isVisible = toRef(props, 'visible');
+
+useFocusTrap(modalContentRef, isVisible);
 
 const handleThemeSelect = (themeKey: string) => {
   setTheme(themeKey);
@@ -29,26 +36,39 @@ const handleOverlayClick = (e: MouseEvent) => {
     emit('close');
   }
 };
+
+const handleEscapeKey = (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && props.visible) {
+    emit('close');
+  }
+};
 </script>
 
 <template>
   <Teleport to="body">
     <Transition name="modal">
       <div v-if="visible" class="modal-overlay" @click="handleOverlayClick">
-        <div class="modal-content">
+        <div
+          ref="modalContentRef"
+          class="modal-content"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="settings-modal-title"
+          @keydown="handleEscapeKey"
+        >
           <div class="modal-header">
-            <h2>
-              <Icon icon="mdi:cog" class="header-icon" />
+            <h2 id="settings-modal-title">
+              <Icon icon="mdi:cog" class="header-icon" aria-hidden="true" />
               设置
             </h2>
-            <button class="close-btn" @click="emit('close')">
-              <Icon icon="mdi:close" />
+            <button class="close-btn" aria-label="关闭设置面板" @click="emit('close')">
+              <Icon icon="mdi:close" aria-hidden="true" />
             </button>
           </div>
           <div class="modal-body">
             <div class="settings-section">
               <h3>
-                <Icon icon="mdi:palette" />
+                <Icon icon="mdi:palette" aria-hidden="true" />
                 主题色调
               </h3>
               <div class="theme-grid">
@@ -58,10 +78,14 @@ const handleOverlayClick = (e: MouseEvent) => {
                   class="theme-option"
                   :class="{ active: currentThemeKey === theme.key }"
                   :title="theme.name"
+                  :aria-label="`选择${theme.name}主题`"
+                  :aria-pressed="currentThemeKey === theme.key"
                   @click="handleThemeSelect(theme.key)"
                 >
                   <div
                     class="theme-preview"
+                    role="img"
+                    :aria-label="`${theme.name}主题预览`"
                     :style="{
                       background: `linear-gradient(135deg, ${theme.backgroundColor} 0%, ${theme.cardBackground} 50%, ${theme.primaryColor} 100%)`,
                     }"
@@ -70,21 +94,26 @@ const handleOverlayClick = (e: MouseEvent) => {
                       v-if="theme.key === 'custom'"
                       icon="mdi:image-edit-outline"
                       class="custom-theme-icon"
+                      aria-hidden="true"
                     />
                     <Icon
                       v-if="currentThemeKey === theme.key"
                       icon="mdi:check"
                       class="check-icon"
+                      aria-hidden="true"
                     />
                   </div>
                 </button>
               </div>
               <div v-if="isCustomTheme" class="custom-bg-input">
+                <label for="custom-bg-url" class="sr-only">自定义背景图片链接</label>
                 <input
+                  id="custom-bg-url"
                   type="text"
                   :value="customBackgroundUrl"
                   placeholder="输入背景图片链接"
                   class="bg-url-input"
+                  aria-label="自定义背景图片URL"
                   @input="handleBackgroundUrlChange"
                 />
               </div>
@@ -149,8 +178,8 @@ const handleOverlayClick = (e: MouseEvent) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: none;
   border-radius: 10px;
   background: rgba(128, 128, 128, 0.1);
@@ -190,10 +219,12 @@ const handleOverlayClick = (e: MouseEvent) => {
 .theme-option {
   display: flex;
   align-items: center;
-  padding: 0;
+  padding: 0.5rem;
   border: none;
   background: none;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .theme-preview {
@@ -253,14 +284,32 @@ const handleOverlayClick = (e: MouseEvent) => {
   background: rgba(128, 128, 128, 0.08);
 }
 
-.modal-enter-active,
-.modal-leave-active {
-  transition: all 0.3s ease;
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
-.modal-enter-active .modal-content,
+.modal-enter-active {
+  transition: opacity 0.25s ease-out;
+}
+
+.modal-enter-active .modal-content {
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-leave-active {
+  transition: opacity 0.2s ease-in;
+}
+
 .modal-leave-active .modal-content {
-  transition: all 0.3s ease;
+  transition: all 0.2s ease-in;
 }
 
 .modal-enter-from,
@@ -270,7 +319,7 @@ const handleOverlayClick = (e: MouseEvent) => {
 
 .modal-enter-from .modal-content,
 .modal-leave-to .modal-content {
-  transform: scale(0.9);
+  transform: scale(0.9) translateY(10px);
   opacity: 0;
 }
 </style>
