@@ -1,5 +1,6 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { siteConfig } from '../config/site.config';
+import type { UptimeKumaSection } from '../config/site.config';
 
 export interface MonitorStatus {
   id: number;
@@ -13,14 +14,30 @@ export interface MonitorStatus {
 }
 
 export interface UptimeKumaData {
-  heartbeatList: Record<string, any[]>;
-  monitorList: any[];
+  heartbeatList: Record<string, UptimeKumaHeartbeat[]>;
+  monitorList: UptimeKumaMonitor[];
   uptimeList: Record<string, number>;
 }
 
 export interface UptimeKumaConfig {
   url: string;
   slug: string;
+}
+
+interface UptimeKumaHeartbeat {
+  status: number;
+  time: string;
+  msg: string;
+  ping?: number;
+}
+
+interface UptimeKumaMonitor {
+  id: number;
+  name: string;
+}
+
+interface UptimeKumaStatusGroup {
+  monitorList?: UptimeKumaMonitor[];
 }
 
 export function useUptimeKuma(overrideConfig?: UptimeKumaConfig) {
@@ -40,7 +57,9 @@ export function useUptimeKuma(overrideConfig?: UptimeKumaConfig) {
     }
 
     loading.value = true;
-    const config = overrideConfig || (siteConfig as any).uptimeKuma;
+    const config =
+      overrideConfig ||
+      siteConfig.rightPanel.sections.find((s): s is UptimeKumaSection => s.type === 'uptimeKuma');
 
     if (!config) {
       loading.value = false;
@@ -87,9 +106,9 @@ export function useUptimeKuma(overrideConfig?: UptimeKumaConfig) {
       const statusData = await statusRes.json();
       const heartbeatData = await heartbeatRes.json();
 
-      const allMonitors: any[] = [];
+      const allMonitors: UptimeKumaMonitor[] = [];
       if (statusData.publicGroupList) {
-        statusData.publicGroupList.forEach((group: any) => {
+        statusData.publicGroupList.forEach((group: UptimeKumaStatusGroup) => {
           if (group.monitorList) {
             allMonitors.push(...group.monitorList);
           }
@@ -99,13 +118,13 @@ export function useUptimeKuma(overrideConfig?: UptimeKumaConfig) {
       const heartbeatList = heartbeatData.heartbeatList || {};
       const uptimeList = heartbeatData.uptimeList || {};
 
-      const mergedMonitors: MonitorStatus[] = allMonitors.map((m: any) => {
+      const mergedMonitors: MonitorStatus[] = allMonitors.map((m: UptimeKumaMonitor) => {
         const heartbeats = heartbeatList[m.id] || [];
         const lastHeartbeat = heartbeats[heartbeats.length - 1];
 
         const uptimeKey = `${m.id}_24`;
         const uptime = uptimeList[uptimeKey] !== undefined ? uptimeList[uptimeKey] * 100 : null;
-        const history = heartbeats.slice(-20).map((h: any) => h.status);
+        const history = heartbeats.slice(-20).map((h: UptimeKumaHeartbeat) => h.status);
 
         return {
           id: m.id,
@@ -137,15 +156,19 @@ export function useUptimeKuma(overrideConfig?: UptimeKumaConfig) {
 
       error.value = null;
       retryCount.value = 0;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Uptime Kuma fetch error:', err);
 
-      if (err.name === 'AbortError') {
-        error.value = '请求超时，请检查网络连接';
-      } else if (err.message?.includes('Failed to fetch')) {
-        error.value = '无法连接到 Uptime Kuma 服务器，请检查 URL 是否正确';
+      if (err instanceof Error) {
+        if (err.name === 'AbortError') {
+          error.value = '请求超时，请检查网络连接';
+        } else if (err.message?.includes('Failed to fetch')) {
+          error.value = '无法连接到 Uptime Kuma 服务器，请检查 URL 是否正确';
+        } else {
+          error.value = err.message || '获取状态时发生未知错误';
+        }
       } else {
-        error.value = err.message || '获取状态时发生未知错误';
+        error.value = '获取状态时发生未知错误';
       }
 
       if (isRetry && retryCount.value < maxRetries) {
