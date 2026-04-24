@@ -1,4 +1,4 @@
-import type { SiteConfig } from '../config/site.config';
+import type { SiteConfig, Skill, SkillSection } from '../config/site.config';
 
 export interface SEOData {
   title: string;
@@ -125,10 +125,10 @@ export function generateDescription(config: SiteConfig): string {
 
   if (description.length < 150 && rightPanel?.sections) {
     const skillsSection = rightPanel.sections.find(
-      (section) => section.type === 'skills' && section.enabled
+      (section): section is SkillSection => section.type === 'skills' && section.enabled
     );
-    if (skillsSection && 'items' in skillsSection && skillsSection.items.length > 0) {
-      const skillNames = (skillsSection.items as any[]).map((skill) => (skill as any).name);
+    if (skillsSection && skillsSection.items.length > 0) {
+      const skillNames = skillsSection.items.map((skill: Skill) => skill.name);
       const skillsText = `擅长 ${skillNames.join('、')}`;
       if (description.length + skillsText.length <= 160) {
         description += ` ${skillsText}`;
@@ -182,11 +182,11 @@ export function generateKeywords(config: SiteConfig): string {
 
   if (rightPanel?.sections) {
     const skillsSection = rightPanel.sections.find(
-      (section) => section.type === 'skills' && section.enabled
+      (section): section is SkillSection => section.type === 'skills' && section.enabled
     );
-    if (skillsSection && 'items' in skillsSection) {
-      (skillsSection.items as any[]).forEach((skill) => {
-        const cleaned = (skill as any).name?.trim().toLowerCase();
+    if (skillsSection) {
+      skillsSection.items.forEach((skill: Skill) => {
+        const cleaned = skill.name?.trim().toLowerCase();
         if (cleaned && !STOP_WORDS.has(cleaned)) {
           keywords.add(cleaned);
         }
@@ -213,4 +213,18 @@ export function generateSEO(config: SiteConfig): SEOData {
 
 export function getCanonicalUrl(config: SiteConfig): string {
   return config.site.domain;
+}
+
+export function getOgImage(config: SiteConfig): string {
+  if (config.seo?.ogImage) {
+    return config.seo.ogImage;
+  }
+  return config.profile.avatar;
+}
+
+export function getTwitterImage(config: SiteConfig): string {
+  if (config.seo?.twitterImage) {
+    return config.seo.twitterImage;
+  }
+  return getOgImage(config);
 }

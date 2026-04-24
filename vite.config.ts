@@ -41,21 +41,58 @@ function robotsTxtPlugin() {
     writeBundle() {
       const robotsContent = `# robots.txt for homepage
 # https://www.robotstxt.org/
+# Last updated: ${new Date().toISOString().split('T')[0]}
 
+# 允许所有搜索引擎抓取
 User-agent: *
 Allow: /
 
 # Sitemap location
 Sitemap: ${domain}/sitemap.xml
 
-# Crawl-delay for polite crawling (optional)
+# Crawl-delay for polite crawling (秒)
 Crawl-delay: 1
 
-# Disallow common paths that shouldn't be indexed
+# 禁止抓取的路径（常见的不应被索引的路径）
 Disallow: /admin/
 Disallow: /private/
 Disallow: /tmp/
-Disallow: /assets/
+Disallow: /.git/
+Disallow: /node_modules/
+
+# 允许抓取静态资源（CSS、JS、图片等）
+Allow: /assets/*.css$
+Allow: /assets/*.js$
+Allow: /assets/*.png$
+Allow: /assets/*.jpg$
+Allow: /assets/*.svg$
+Allow: /assets/*.woff2$
+
+# 针对特定爬虫的特殊规则
+# Googlebot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Baiduspider (百度蜘蛛)
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 10
+
+# 禁止恶意爬虫
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
 `;
       writeFileSync(resolve(__dirname, 'dist/robots.txt'), robotsContent);
     },

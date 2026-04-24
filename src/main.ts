@@ -4,7 +4,7 @@ import './style.css';
 import App from './App.vue';
 import { initSentry } from './utils/sentry';
 import { siteConfig } from './config/site.config';
-import { generateSEO } from './utils/seoGenerator';
+import { generateSEO, getOgImage, getTwitterImage } from './utils/seoGenerator';
 import { useStructuredData } from './composables/useStructuredData';
 
 const app = createApp(App);
@@ -61,25 +61,28 @@ function updateMetaTags() {
 
   setMetaContent('meta[property="og:title"]', seo.title);
   setMetaContent('meta[property="og:description"]', seo.description);
-  setMetaContent('meta[property="og:image"]', siteConfig.profile.avatar);
+  setMetaContent('meta[property="og:image"]', getOgImage(siteConfig));
   setMetaContent('meta[property="og:url"]', baseUrl);
 
   setMetaContent('meta[name="twitter:title"]', seo.title);
   setMetaContent('meta[name="twitter:description"]', seo.description);
-  setMetaContent('meta[name="twitter:image"]', siteConfig.profile.avatar);
+  setMetaContent('meta[name="twitter:image"]', getTwitterImage(siteConfig));
 
   setLinkHref('link[rel="canonical"]', baseUrl);
 
-  // 添加结构化数据
-  const { structuredData } = useStructuredData();
-  let jsonLdScript = document.getElementById('structured-data');
-  if (!jsonLdScript) {
-    jsonLdScript = document.createElement('script');
+  // 添加结构化数据（多个 JSON-LD 类型）
+  const { allStructuredData } = useStructuredData();
+
+  const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
+  existingScripts.forEach((script) => script.remove());
+
+  allStructuredData.value.forEach((jsonData, index) => {
+    const jsonLdScript = document.createElement('script');
     jsonLdScript.setAttribute('type', 'application/ld+json');
-    jsonLdScript.id = 'structured-data';
+    jsonLdScript.id = `structured-data-${index}`;
+    jsonLdScript.textContent = jsonData;
     document.head.appendChild(jsonLdScript);
-  }
-  jsonLdScript.textContent = structuredData.value;
+  });
 }
 
 updateMetaTags();

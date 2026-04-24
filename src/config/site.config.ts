@@ -140,6 +140,12 @@ export interface SiteConfig {
     /** 站点域名 */
     domain: string;
   };
+  seo?: {
+    /** Open Graph 分享图片（留空则使用头像） */
+    ogImage?: string;
+    /** Twitter Card 图片（留空则使用 OG 图片或头像） */
+    twitterImage?: string;
+  };
   profile: {
     name: string;
     avatar: string;
