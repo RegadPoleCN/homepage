@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useWindowScroll } from '@vueuse/core';
 import LeftSidebar from './components/LeftSidebar.vue';
@@ -7,29 +7,70 @@ import CenterPanel from './components/CenterPanel.vue';
 import RightPanel from './components/RightPanel.vue';
 import Footer from './components/Footer.vue';
 import SettingsModal from './components/SettingsModal.vue';
-
 import { useThemeStore } from './stores/theme';
 import { useScrollToTop } from './composables/useScrollToTop';
+import { usePerformanceMonitor } from './composables/usePerformanceMonitor';
 
 const themeStore = useThemeStore();
 const { y } = useWindowScroll();
 const { isLaunching, scrollToTop } = useScrollToTop();
 
+if (import.meta.env.DEV) {
+  usePerformanceMonitor();
+}
+
 const showSettings = ref(false);
-const showBackToTop = computed(() => y.value > 500);
+
+const leftColumnRef = ref<HTMLElement | null>(null);
+const rightColumnRef = ref<HTMLElement | null>(null);
+const leftScrollPos = ref(0);
+const rightScrollPos = ref(0);
+
+const showBackToTop = computed(
+  () => y.value > 500 || leftScrollPos.value > 500 || rightScrollPos.value > 500
+);
 
 const mainContentId = 'main-content';
 
 const handleSkipToContent = () => {
   const mainContent = document.getElementById(mainContentId);
   if (mainContent) {
-    mainContent.focus();
     mainContent.scrollIntoView({ behavior: 'smooth' });
   }
 };
 
+const handleBackToTop = () => {
+  const scrollableElements = [leftColumnRef.value, rightColumnRef.value].filter(
+    (el): el is HTMLElement => el !== null
+  );
+  scrollToTop(scrollableElements);
+};
+
 onMounted(() => {
   themeStore.initTheme();
+
+  const handleLeftScroll = () => {
+    leftScrollPos.value = leftColumnRef.value?.scrollTop ?? 0;
+  };
+  const handleRightScroll = () => {
+    rightScrollPos.value = rightColumnRef.value?.scrollTop ?? 0;
+  };
+
+  if (leftColumnRef.value) {
+    leftColumnRef.value.addEventListener('scroll', handleLeftScroll, { passive: true });
+  }
+  if (rightColumnRef.value) {
+    rightColumnRef.value.addEventListener('scroll', handleRightScroll, { passive: true });
+  }
+
+  onBeforeUnmount(() => {
+    if (leftColumnRef.value) {
+      leftColumnRef.value.removeEventListener('scroll', handleLeftScroll);
+    }
+    if (rightColumnRef.value) {
+      rightColumnRef.value.removeEventListener('scroll', handleRightScroll);
+    }
+  });
 });
 </script>
 
@@ -39,21 +80,28 @@ onMounted(() => {
       跳到主要内容
     </a>
 
-    <button class="settings-btn" title="设置" aria-label="打开设置" @click="showSettings = true">
+    <button
+      class="settings-btn"
+      title="设置"
+      :aria-label="showSettings ? '关闭设置' : '打开设置'"
+      :aria-expanded="showSettings"
+      aria-haspopup="dialog"
+      @click="showSettings = true"
+    >
       <Icon icon="mdi:cog" aria-hidden="true" />
     </button>
 
     <GitHubBadge />
 
-    <main id="main-content" class="main-layout" role="main" tabindex="-1">
-      <aside class="left-column" role="complementary" aria-label="左侧边栏">
+    <main id="main-content" class="main-layout" role="main">
+      <aside ref="leftColumnRef" class="left-column" role="complementary" aria-label="左侧边栏">
         <LeftSidebar />
       </aside>
       <div class="center-column">
         <CenterPanel />
         <Footer class="desktop-footer" />
       </div>
-      <aside class="right-column" role="complementary" aria-label="右侧边栏">
+      <aside ref="rightColumnRef" class="right-column" role="complementary" aria-label="右侧边栏">
         <RightPanel />
       </aside>
     </main>
@@ -61,11 +109,12 @@ onMounted(() => {
     <Footer class="mobile-footer" />
 
     <button
+      v-show="showBackToTop"
       class="back-to-top-btn"
       :class="{ visible: showBackToTop, launching: isLaunching }"
       title="回到顶部"
       aria-label="返回顶部"
-      @click="scrollToTop"
+      @click="handleBackToTop"
     >
       <div class="rocket-wrapper">
         <Icon icon="mdi:rocket-launch" class="rocket-icon" aria-hidden="true" />
@@ -79,22 +128,38 @@ onMounted(() => {
 <style scoped>
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: -100%;
   left: 0;
   background: var(--primary-color);
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
   z-index: 9999;
-  transition: top 0.3s;
+  transition: top 0.3s ease-in-out;
   text-decoration: none;
-  font-weight: 600;
-  border-radius: 0 0 4px 0;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 0 0 8px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 2px solid transparent;
 }
 
 .skip-link:focus {
   top: 0;
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
+  outline: 3px solid var(--accent-color);
+  outline-offset: 0;
+  border-color: var(--accent-color);
+}
+
+@media (forced-colors: active) {
+  .skip-link {
+    border: 2px solid ButtonText;
+    forced-color-adjust: none;
+  }
+
+  .skip-link:focus {
+    outline: 3px solid Highlight;
+    border-color: Highlight;
+  }
 }
 
 .app-container {
@@ -146,9 +211,14 @@ onMounted(() => {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-  transform: scale(0);
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.3s ease,
+    box-shadow 0.3s ease,
+    visibility 0.3s ease;
+  transform: scale(0) translateY(20px);
   opacity: 0;
+  visibility: hidden;
   z-index: 900;
   overflow: hidden;
 }
@@ -166,8 +236,9 @@ onMounted(() => {
 }
 
 .back-to-top-btn.visible {
-  transform: scale(1);
+  transform: scale(1) translateY(0);
   opacity: 1;
+  visibility: visible;
 }
 
 .back-to-top-btn.launching .rocket-wrapper {
@@ -322,14 +393,8 @@ onMounted(() => {
   }
 }
 
+/* Back to top button visible on all screen sizes when scrolling */
 @media (max-width: 768px) {
-  .settings-btn {
-    top: 0.75rem;
-    right: 0.75rem;
-    width: 40px;
-    height: 40px;
-  }
-
   .back-to-top-btn {
     bottom: 1.5rem;
     right: 1.5rem;
@@ -345,13 +410,6 @@ onMounted(() => {
   .center-column,
   .right-column {
     padding: 1.5rem 1rem;
-  }
-}
-
-/* Hide back to top on desktop */
-@media (min-width: 1025px) {
-  .back-to-top-btn {
-    display: none;
   }
 }
 </style>
