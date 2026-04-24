@@ -18,7 +18,8 @@
     "@sentry/vue": "^10.45.0",
     "@vueuse/core": "^14.2.1",
     "pinia": "^3.0.4",
-    "vue": "^3.5.30"
+    "vue": "^3.5.30",
+    "web-vitals": "^5.2.0"
   },
   "lint-staged": {
     "*.{vue,js,jsx,cjs,mjs,ts,tsx,mts,cts}": "eslint --fix",
