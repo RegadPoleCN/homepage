@@ -4,6 +4,11 @@ import { VitePWA } from 'vite-plugin-pwa';
 import ViteSitemap from 'vite-plugin-sitemap';
 import { resolve } from 'path';
 import { readFileSync, writeFileSync } from 'fs';
+import type {
+  RightPanelSection,
+  PersonalWebsiteSection,
+  ProjectSection,
+} from './src/config/site.config';
 
 const siteConfig = JSON.parse(
   readFileSync(resolve(__dirname, './src/config/site.config.json'), 'utf-8')
@@ -14,16 +19,20 @@ function getDynamicRoutes() {
   const urls: string[] = [];
 
   if (siteConfig.rightPanel?.sections) {
-    siteConfig.rightPanel.sections.forEach((section: any) => {
-      if (section.type === 'personalWebsites' && section.enabled && section.items) {
-        section.items.forEach((item: any) => {
+    siteConfig.rightPanel.sections.forEach((section: RightPanelSection) => {
+      if (
+        section.type === 'personalWebsites' &&
+        section.enabled &&
+        (section as PersonalWebsiteSection).items
+      ) {
+        (section as PersonalWebsiteSection).items.forEach((item) => {
           if (item.url && !item.url.startsWith('http')) {
             urls.push(item.url);
           }
         });
       }
-      if (section.type === 'projects' && section.enabled && section.items) {
-        section.items.forEach((item: any) => {
+      if (section.type === 'projects' && section.enabled && (section as ProjectSection).items) {
+        (section as ProjectSection).items.forEach((item) => {
           if (item.url && !item.url.startsWith('http')) {
             urls.push(item.url);
           }
@@ -33,6 +42,27 @@ function getDynamicRoutes() {
   }
 
   return urls;
+}
+
+function getUptimeKumaCspOrigin() {
+  const section = siteConfig.rightPanel?.sections?.find(
+    (s: RightPanelSection) => s.type === 'uptimeKuma'
+  ) as { url?: string } | undefined;
+  if (!section?.url) return '';
+  try {
+    return ` ${new URL(section.url).origin}`;
+  } catch {
+    return '';
+  }
+}
+
+function cspPlugin() {
+  return {
+    name: 'csp-plugin',
+    transformIndexHtml(html: string) {
+      return html.replace('__UPTIME_KUMA_CSP__', getUptimeKumaCspOrigin());
+    },
+  };
 }
 
 function robotsTxtPlugin() {
@@ -104,6 +134,7 @@ export default defineConfig({
   plugins: [
     vue(),
     robotsTxtPlugin(),
+    cspPlugin(),
     ViteSitemap({
       hostname: domain,
       dynamicRoutes: getDynamicRoutes(),
@@ -146,20 +177,6 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365,
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
           {
             urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
             handler: 'CacheFirst',
