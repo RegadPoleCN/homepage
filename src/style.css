@@ -1,17 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
   scroll-behavior: smooth;
-  --primary-color: #3b82f6;
-  --background-color: #f8fafc;
-  --text-color: #1e293b;
-  --card-background: #ffffff;
-  --accent-color: #6366f1;
-  --left-bg: #e2e8f0;
-  --center-bg: #ffffff;
-  --right-bg: #f1f5f9;
+  --primary-color: #60a5fa;
+  --background-color: #0f172a;
+  --text-color: #f1f5f9;
+  --card-background: #1e293b;
+  --accent-color: #818cf8;
+  --left-bg: #0f172a;
+  --center-bg: #1e293b;
+  --right-bg: #0f172a;
 
   font-family:
     'Inter',
@@ -32,6 +28,28 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+[data-theme='light'] {
+  --primary-color: #3b82f6;
+  --background-color: #f8fafc;
+  --text-color: #1e293b;
+  --card-background: #ffffff;
+  --accent-color: #6366f1;
+  --left-bg: #e2e8f0;
+  --center-bg: #ffffff;
+  --right-bg: #f1f5f9;
+}
+
+[data-theme='warm'] {
+  --primary-color: #f59e0b;
+  --background-color: #fffbeb;
+  --text-color: #78350f;
+  --card-background: #fde68a;
+  --accent-color: #f97316;
+  --left-bg: #fef3c7;
+  --center-bg: #fffbeb;
+  --right-bg: #fef9c3;
+}
+
 *,
 *::before,
 *::after {
@@ -46,12 +64,29 @@ body {
   color: var(--text-color);
   transition:
     background-color 0.3s ease,
-    color 0.3s ease;
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
   background-image: var(--custom-background-image);
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
+}
+
+.main-layout,
+.left-column,
+.center-column,
+.right-column,
+.profile-card,
+.description-card,
+.content-card,
+.sidebar-content,
+.stats-card {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 a {
@@ -187,4 +222,46 @@ select:focus-visible {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+@media (max-width: 1024px) {
+  .left-column,
+  .right-column {
+    border-top: 1px solid rgba(128, 128, 128, 0.15);
+    padding-top: 1.5rem;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+.animate-in-delay-1 {
+  animation-delay: 0.05s;
+}
+.animate-in-delay-2 {
+  animation-delay: 0.1s;
+}
+.animate-in-delay-3 {
+  animation-delay: 0.15s;
+}
+.animate-in-delay-4 {
+  animation-delay: 0.2s;
+}
+.animate-in-delay-5 {
+  animation-delay: 0.25s;
+}
+.animate-in-delay-6 {
+  animation-delay: 0.3s;
 }

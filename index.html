@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="zh-CN">
   <head>
+    <script>
+      (function(){try{var t=localStorage.getItem('homepage-theme');if(t){document.documentElement.setAttribute('data-theme',t)}else if(window.matchMedia('(prefers-color-scheme: light)').matches){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})();
+    </script>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -12,6 +15,7 @@
 
     <!-- PWA & Apple Web App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Homepage" />
 
@@ -29,14 +33,6 @@
     <link rel="dns-prefetch" href="//avatars.githubusercontent.com" />
     <link rel="preconnect" href="https://avatars.githubusercontent.com" crossorigin />
 
-    <!-- Font Preload (Inter) -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" as="style" />
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2" as="font" type="font/woff2" crossorigin />
-
-    <!-- Module Preload for Critical Modules -->
-    <link rel="modulepreload" href="/src/main.ts" />
-    <link rel="modulepreload" href="/src/App.vue" />
-
     <!-- Iconify API Configuration for faster icon loading -->
     <script>
       // Configure Iconify to use multiple API sources for reliability
@@ -52,7 +48,7 @@
     </script>
 
     <!-- SEO Meta Tags (will be dynamically updated by JavaScript) -->
-    <title data-react-helmet="true">homepage</title>
+    <title>homepage</title>
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     <meta name="author" content="" />
@@ -74,7 +70,8 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="" />
 
-    <script async src="//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js"></script>
+    <!-- Content Security Policy (CSP) - style-src 'unsafe-inline' required for Vue scoped styles -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.busuanzi.cc blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.iconify.design https://api.unisvg.com https://api.simplesvg.com https://cdn.jsdelivr.net https://cdn.busuanzi.cc__UPTIME_KUMA_CSP__;" />
   </head>
   <body>
     <div id="app"></div>
