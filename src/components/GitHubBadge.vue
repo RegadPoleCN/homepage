@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { siteConfig } from '@/config/site.config';
 
-const githubUrl = 'https://github.com/RegadPoleCN/homepage';
+const githubUrl = siteConfig.githubUrl || 'https://github.com/RegadPoleCN/homepage';
 </script>
 
 <template>
@@ -18,8 +19,9 @@ const githubUrl = 'https://github.com/RegadPoleCN/homepage';
 
 <style scoped>
 .github-badge {
-  position: absolute;
-  margin: -20px;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 60px;
   height: 60px;
   display: flex;

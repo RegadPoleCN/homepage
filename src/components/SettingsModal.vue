@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, toRef } from 'vue';
 import { Icon } from '@iconify/vue';
-import { useThemeStore } from '../stores/theme';
+import { useThemeStore } from '@/stores/theme';
 import { storeToRefs } from 'pinia';
-import { useFocusTrap } from '../composables/useFocusTrap';
+import { useFocusTrap } from '@/composables/useFocusTrap';
 
 const props = defineProps<{
   visible: boolean;

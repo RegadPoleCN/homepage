@@ -1,15 +1,25 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, onMounted, computed, defineAsyncComponent } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useWindowScroll } from '@vueuse/core';
-import LeftSidebar from './components/LeftSidebar.vue';
-import CenterPanel from './components/CenterPanel.vue';
-import RightPanel from './components/RightPanel.vue';
-import Footer from './components/Footer.vue';
-import SettingsModal from './components/SettingsModal.vue';
-import { useThemeStore } from './stores/theme';
-import { useScrollToTop } from './composables/useScrollToTop';
-import { usePerformanceMonitor } from './composables/usePerformanceMonitor';
+import LeftSidebar from '@/components/LeftSidebar.vue';
+import CenterPanel from '@/components/CenterPanel.vue';
+import RightPanelSkeleton from '@/components/RightPanelSkeleton.vue';
+
+const RightPanel = defineAsyncComponent({
+  loader: () => import('@/components/RightPanel.vue'),
+  loadingComponent: RightPanelSkeleton,
+  delay: 200,
+});
+
+const Footer = defineAsyncComponent(() => import('@/components/Footer.vue'));
+
+const SettingsModal = defineAsyncComponent(() => import('@/components/SettingsModal.vue'));
+const GitHubBadge = defineAsyncComponent(() => import('@/components/GitHubBadge.vue'));
+import { useThemeStore } from '@/stores/theme';
+import { useScrollToTop } from '@/composables/useScrollToTop';
+import { useAppScroll } from '@/composables/useAppScroll';
+import { usePerformanceMonitor } from '@/composables/usePerformanceMonitor';
 
 const themeStore = useThemeStore();
 const { y } = useWindowScroll();
@@ -21,10 +31,7 @@ if (import.meta.env.DEV) {
 
 const showSettings = ref(false);
 
-const leftColumnRef = ref<HTMLElement | null>(null);
-const rightColumnRef = ref<HTMLElement | null>(null);
-const leftScrollPos = ref(0);
-const rightScrollPos = ref(0);
+const { leftColumnRef, rightColumnRef, leftScrollPos, rightScrollPos } = useAppScroll();
 
 const showBackToTop = computed(
   () => y.value > 500 || leftScrollPos.value > 500 || rightScrollPos.value > 500
@@ -48,29 +55,6 @@ const handleBackToTop = () => {
 
 onMounted(() => {
   themeStore.initTheme();
-
-  const handleLeftScroll = () => {
-    leftScrollPos.value = leftColumnRef.value?.scrollTop ?? 0;
-  };
-  const handleRightScroll = () => {
-    rightScrollPos.value = rightColumnRef.value?.scrollTop ?? 0;
-  };
-
-  if (leftColumnRef.value) {
-    leftColumnRef.value.addEventListener('scroll', handleLeftScroll, { passive: true });
-  }
-  if (rightColumnRef.value) {
-    rightColumnRef.value.addEventListener('scroll', handleRightScroll, { passive: true });
-  }
-
-  onBeforeUnmount(() => {
-    if (leftColumnRef.value) {
-      leftColumnRef.value.removeEventListener('scroll', handleLeftScroll);
-    }
-    if (rightColumnRef.value) {
-      rightColumnRef.value.removeEventListener('scroll', handleRightScroll);
-    }
-  });
 });
 </script>
 

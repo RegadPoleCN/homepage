@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Icon } from '@iconify/vue';
-import { siteConfig } from '../config/site.config';
-import SiteStats from './SiteStats.vue';
+import { siteConfig } from '@/config/site.config';
+import SiteStats from '@/components/SiteStats.vue';
+
+const scrollToSection = (className: string) => {
+  const element = document.querySelector(`.${className}`);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
 
 const footer = siteConfig.footer;
 
@@ -19,6 +26,21 @@ const yearRange = computed(() => {
   <footer class="site-footer" role="contentinfo">
     <div class="footer-content">
       <SiteStats class="mobile-stats" />
+      <nav class="mobile-nav" aria-label="快速导航">
+        <a href="#" class="mobile-nav-link" @click.prevent="scrollToSection('center-column')">
+          <Icon icon="mdi:account" aria-hidden="true" />
+          <span>个人资料</span>
+        </a>
+        <a
+          v-if="footer.icpBeian"
+          href="#"
+          class="mobile-nav-link"
+          @click.prevent="scrollToSection('right-column')"
+        >
+          <Icon icon="mdi:information" aria-hidden="true" />
+          <span>备案信息</span>
+        </a>
+      </nav>
       <div class="beian-info">
         <a
           v-if="footer.icpBeian"
@@ -104,5 +126,37 @@ const yearRange = computed(() => {
   font-size: 0.75rem;
   color: var(--text-color);
   opacity: 0.5;
+}
+
+.mobile-nav {
+  display: none;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+@media (max-width: 1024px) {
+  .mobile-nav {
+    display: flex;
+  }
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+  color: var(--text-color);
+  opacity: 0.7;
+  text-decoration: none;
+  padding: 0.5rem;
+  min-height: 44px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-link:hover {
+  opacity: 1;
+  background: rgba(128, 128, 128, 0.1);
 }
 </style>

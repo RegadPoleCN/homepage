@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
-import { useSiteStats } from '../composables/useSiteStats';
+import { useSiteStats } from '@/composables/useSiteStats';
+import { loadBusuanzi } from '@/utils/busuanzi';
 
 const { runtime } = useSiteStats();
+
+onMounted(() => {
+  loadBusuanzi();
+});
 </script>
 
 <template>

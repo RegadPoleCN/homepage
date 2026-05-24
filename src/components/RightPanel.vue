@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import UptimeCard from './UptimeCard.vue';
-import SmartIcon from './SmartIcon.vue';
-import { siteConfig } from '../config/site.config';
+import UptimeCard from '@/components/UptimeCard.vue';
+import SmartIcon from '@/components/SmartIcon.vue';
+import { Icon } from '@iconify/vue';
+import { siteConfig } from '@/config/site.config';
 import type {
   Activity,
   ActivitySection,
@@ -10,8 +11,8 @@ import type {
   PersonalWebsiteSection,
   RightPanelSection,
   UptimeKumaSection,
-} from '../config/site.config';
-import { formatRelativeTime } from '../utils/format';
+} from '@/config/site.config';
+import { formatRelativeTime } from '@/utils/format';
 
 const rightPanelSections = siteConfig.rightPanel.sections;
 
@@ -71,8 +72,11 @@ function getActivityTime(item: Activity): string {
 <template>
   <section class="right-panel" aria-label="右侧面板内容">
     <!-- 右栏区块 -->
-    <template v-for="section in rightPanelSections" :key="section.type">
-      <div v-if="section.enabled" class="content-card">
+    <template v-for="(section, index) in rightPanelSections" :key="section.type">
+      <div
+        v-if="section.enabled"
+        :class="['content-card', 'animate-in', `animate-in-delay-${index + 2}`]"
+      >
         <div class="card-header">
           <SmartIcon :icon="section.icon" class="header-icon" aria-hidden="true" />
           <h2>{{ section.title }}</h2>
@@ -157,10 +161,6 @@ function getActivityTime(item: Activity): string {
     </template>
   </section>
 </template>
-
-<script lang="ts">
-import { Icon } from '@iconify/vue';
-</script>
 
 <style scoped>
 .right-panel {
