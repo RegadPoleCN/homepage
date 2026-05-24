@@ -1,14 +1,19 @@
 import { defineStore } from 'pinia';
 import { computed, watch } from 'vue';
 import { useStorage } from '@vueuse/core';
-import { siteConfig } from '../config/site.config';
+import { siteConfig } from '@/config/site.config';
 
 const THEME_STORAGE_KEY = 'homepage-theme';
+const THEME_USER_SET = 'homepage-theme-user-set';
 const CUSTOM_BG_STORAGE_KEY = 'homepage-custom-bg';
 
 export const useThemeStore = defineStore('theme', () => {
   const currentThemeKey = useStorage<string>(THEME_STORAGE_KEY, 'dark');
   const customBackgroundUrl = useStorage<string>(CUSTOM_BG_STORAGE_KEY, '');
+  const userHasSet = useStorage<boolean>(THEME_USER_SET, false);
+
+  let mediaQueryRef: MediaQueryList | null = null;
+  let mediaQueryHandler: ((e: MediaQueryListEvent) => void) | null = null;
 
   const themes = computed(() => siteConfig.themes);
 
@@ -55,6 +60,7 @@ export const useThemeStore = defineStore('theme', () => {
   };
 
   const setTheme = (themeKey: string) => {
+    userHasSet.value = true;
     currentThemeKey.value = themeKey;
   };
 
@@ -63,7 +69,29 @@ export const useThemeStore = defineStore('theme', () => {
   };
 
   const initTheme = () => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQueryRef = mediaQuery;
+
+    if (!userHasSet.value) {
+      const prefersDark = mediaQuery.matches;
+      currentThemeKey.value = prefersDark ? 'dark' : 'light';
+
+      mediaQueryHandler = (e: MediaQueryListEvent) => {
+        if (!userHasSet.value) {
+          currentThemeKey.value = e.matches ? 'dark' : 'light';
+        }
+      };
+      mediaQuery.addEventListener('change', mediaQueryHandler);
+    }
     applyTheme(currentThemeKey.value);
+  };
+
+  const cleanupMediaListener = () => {
+    if (mediaQueryRef && mediaQueryHandler) {
+      mediaQueryRef.removeEventListener('change', mediaQueryHandler);
+      mediaQueryRef = null;
+      mediaQueryHandler = null;
+    }
   };
 
   watch(currentThemeKey, (newKey) => {
@@ -85,5 +113,6 @@ export const useThemeStore = defineStore('theme', () => {
     setTheme,
     setCustomBackground,
     initTheme,
+    cleanupMediaListener,
   };
 });

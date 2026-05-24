@@ -1,4 +1,4 @@
-import type { SiteConfig, Skill, SkillSection } from '../config/site.config';
+import type { SiteConfig, Skill, SkillSection } from '@/config/site.config';
 
 export interface SEOData {
   title: string;
@@ -139,10 +139,6 @@ export function generateDescription(config: SiteConfig): string {
   description = cleanText(description);
 
   description = smartTruncate(description, 160);
-
-  if (description.length < 150) {
-    return description;
-  }
 
   return description;
 }

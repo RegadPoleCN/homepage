@@ -1,11 +1,13 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
 import './style.css';
 import App from './App.vue';
-import { initSentry } from './utils/sentry';
-import { siteConfig } from './config/site.config';
-import { generateSEO, getOgImage, getTwitterImage } from './utils/seoGenerator';
-import { useStructuredData } from './composables/useStructuredData';
+import { initSentry } from '@/utils/sentry';
+import { siteConfig } from '@/config/site.config';
+import { generateSEO, getOgImage, getTwitterImage } from '@/utils/seoGenerator';
+import { generateAllStructuredData } from '@/composables/useStructuredData';
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -69,14 +71,13 @@ function updateMetaTags() {
   setMetaContent('meta[name="twitter:image"]', getTwitterImage(siteConfig));
 
   setLinkHref('link[rel="canonical"]', baseUrl);
+}
 
-  // 添加结构化数据（多个 JSON-LD 类型）
-  const { allStructuredData } = useStructuredData();
-
+function injectStructuredData() {
+  const allData = generateAllStructuredData();
   const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
   existingScripts.forEach((script) => script.remove());
-
-  allStructuredData.value.forEach((jsonData, index) => {
+  allData.forEach((jsonData, index) => {
     const jsonLdScript = document.createElement('script');
     jsonLdScript.setAttribute('type', 'application/ld+json');
     jsonLdScript.id = `structured-data-${index}`;
@@ -86,6 +87,7 @@ function updateMetaTags() {
 }
 
 updateMetaTags();
+injectStructuredData();
 
 app.use(pinia);
 app.mount('#app');
