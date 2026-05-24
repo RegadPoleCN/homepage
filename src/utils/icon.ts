@@ -1,15 +1,9 @@
+import type { IconConfig } from '@/config/site.config';
+
 /**
  * 图标工具函数
  * 自动识别图标来源是图片链接还是图标库
  */
-
-/**
- * 图标配置接口（与 site.config.ts 中的 IconConfig 保持一致）
- */
-export interface IconConfig {
-  /** 图标来源：可以是图片 URL 或 Iconify 图标（如 'mdi:github'） */
-  src: string;
-}
 
 /**
  * 判断是否为有效的 URL
@@ -81,4 +75,11 @@ export interface IconProps {
 export function validateIcon(icon: string): boolean {
   const type = getIconType(icon);
   return type !== 'unknown';
+}
+
+export function resolveIconSrc(icon: string | IconConfig): string {
+  if (typeof icon === 'string') {
+    return icon;
+  }
+  return icon.src;
 }

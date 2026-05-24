@@ -82,12 +82,7 @@ export function formatRelativeTime(timestamp: number | string): string {
  * @returns 格式化的日期字符串，如 "2024-01-15 10:30:00"
  */
 export function formatDateTime(timestamp: number | string): string {
-  let dateValue: Date;
-  if (typeof timestamp === 'string') {
-    dateValue = new Date(timestamp);
-  } else {
-    dateValue = new Date(timestamp);
-  }
+  const dateValue = new Date(timestamp);
 
   if (isNaN(dateValue.getTime())) {
     return '无效日期';
@@ -109,12 +104,7 @@ export function formatDateTime(timestamp: number | string): string {
  * @returns 格式化的日期字符串，如 "2024-01-15"
  */
 export function formatDate(timestamp: number | string): string {
-  let dateValue: Date;
-  if (typeof timestamp === 'string') {
-    dateValue = new Date(timestamp);
-  } else {
-    dateValue = new Date(timestamp);
-  }
+  const dateValue = new Date(timestamp);
 
   if (isNaN(dateValue.getTime())) {
     return '无效日期';

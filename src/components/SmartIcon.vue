@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
-import { getIconType, type IconConfig } from '../utils/icon';
+import { getIconType, resolveIconSrc } from '@/utils/icon';
+import { handleImageError, DEFAULT_ICON } from '@/utils/dom';
+import type { IconConfig } from '@/config/site.config';
 
 const props = defineProps<{
   icon: string | IconConfig;
@@ -9,39 +11,10 @@ const props = defineProps<{
   size?: string | number;
 }>();
 
-const defaultIcon =
-  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ccc"%3E%3Crect width="24" height="24" rx="4"/%3E%3C/svg%3E';
+const iconSrc = computed(() => resolveIconSrc(props.icon));
 
-function handleImageError(event: Event) {
-  const target = event.target;
-  if (target && 'src' in target && target.src !== defaultIcon) {
-    target.src = defaultIcon;
-  }
-}
-
-/**
- * 解析图标配置，返回图标字符串
- */
-function parseIcon(icon: string | IconConfig): string {
-  if (typeof icon === 'string') {
-    return icon;
-  }
-  return icon.src;
-}
-
-/**
- * 获取解析后的图标字符串
- */
-const iconSrc = computed(() => parseIcon(props.icon));
-
-/**
- * 获取图标类型
- */
 const iconType = computed(() => getIconType(iconSrc.value));
 
-/**
- * 计算图标样式类名
- */
 const iconClass = computed(() => {
   const baseClass = 'smart-icon';
   const typeClass = `${baseClass}-${iconType.value}`;
@@ -62,7 +35,7 @@ const iconClass = computed(() => {
     }"
     alt="icon"
     loading="lazy"
-    @error="handleImageError"
+    @error="(e: Event) => handleImageError(e, DEFAULT_ICON)"
   />
 
   <!-- Iconify 图标库类型 -->

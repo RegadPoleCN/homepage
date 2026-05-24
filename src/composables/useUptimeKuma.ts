@@ -1,6 +1,6 @@
 import { ref, onMounted, onUnmounted } from 'vue';
-import { siteConfig } from '../config/site.config';
-import type { UptimeKumaSection } from '../config/site.config';
+import { siteConfig } from '@/config/site.config';
+import type { UptimeKumaSection } from '@/config/site.config';
 
 export interface MonitorStatus {
   id: number;

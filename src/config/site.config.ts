@@ -134,6 +134,8 @@ export interface ThemePreset {
 }
 
 export interface SiteConfig {
+  /** GitHub 仓库地址（可选，用于 GitHubBadge 组件） */
+  githubUrl?: string;
   site: {
     /** 站点标题模板，支持 {name} 变量 */
     title: string;

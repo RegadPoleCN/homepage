@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { useUptimeKuma } from '../composables/useUptimeKuma';
-import LoadingSpinner from './LoadingSpinner.vue';
+import { useUptimeKuma } from '@/composables/useUptimeKuma';
+import type { UptimeKumaConfig } from '@/composables/useUptimeKuma';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import { ref, watch } from 'vue';
-
-interface UptimeKumaConfig {
-  url: string;
-  slug: string;
-}
 
 const props = defineProps<{
   config?: UptimeKumaConfig;
@@ -79,12 +75,7 @@ const getOverallStatusIcon = () => {
 </script>
 
 <template>
-  <div
-    v-if="config || true"
-    class="content-card uptime-card"
-    role="region"
-    aria-label="服务状态监控"
-  >
+  <div class="content-card uptime-card" role="region" aria-label="服务状态监控">
     <div class="card-header">
       <div class="header-left">
         <Icon icon="mdi:server-network" class="header-icon" aria-hidden="true" />

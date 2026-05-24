@@ -1,17 +1,9 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { siteConfig } from '../config/site.config';
+import { siteConfig } from '@/config/site.config';
+import { handleImageError, DEFAULT_AVATAR } from '@/utils/dom';
 
 const friendLinks = siteConfig.friendLinks;
-
-const defaultAvatar = 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=64';
-
-function handleImageError(event: Event) {
-  const target = event.target;
-  if (target && 'src' in target && target.src !== defaultAvatar) {
-    target.src = defaultAvatar;
-  }
-}
 </script>
 
 <template>
@@ -37,7 +29,7 @@ function handleImageError(event: Event) {
             :alt="link.name"
             class="friend-avatar"
             loading="lazy"
-            @error="handleImageError"
+            @error="(e: Event) => handleImageError(e, DEFAULT_AVATAR)"
           />
           <div class="friend-info">
             <span class="friend-name">{{ link.name }}</span>

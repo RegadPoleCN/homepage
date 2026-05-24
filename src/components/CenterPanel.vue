@@ -1,40 +1,22 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Icon } from '@iconify/vue';
-import type { IconifyIcon } from '@iconify/vue';
-import { siteConfig } from '../config/site.config';
-import SiteStats from './SiteStats.vue';
-import GitHubBadge from './GitHubBadge.vue';
+import { siteConfig } from '@/config/site.config';
+import SiteStats from '@/components/SiteStats.vue';
+import GitHubBadge from '@/components/GitHubBadge.vue';
+import { handleImageError, DEFAULT_AVATAR } from '@/utils/dom';
+import { resolveIconSrc } from '@/utils/icon';
 
 const profile = siteConfig.profile;
-
-const defaultAvatar = 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=128';
-
-function handleImageError(event: Event) {
-  const target = event.target;
-  if (target && 'src' in target && target.src !== defaultAvatar) {
-    target.src = defaultAvatar;
-  }
-}
 
 const socialLinks = computed(() => {
   return profile.socialLinks.filter((link) => link.url);
 });
-
-/**
- * 获取图标字符串（向后兼容）
- */
-function getIcon(icon: string | { src: string }): string | IconifyIcon {
-  if (typeof icon === 'string') {
-    return icon;
-  }
-  return icon.src;
-}
 </script>
 
 <template>
   <section class="center-panel" aria-label="个人资料和介绍">
-    <div class="profile-card">
+    <div class="profile-card animate-in">
       <GitHubBadge />
       <div class="avatar-wrapper">
         <img
@@ -42,7 +24,7 @@ function getIcon(icon: string | { src: string }): string | IconifyIcon {
           :alt="`${profile.name}的头像`"
           class="avatar"
           loading="lazy"
-          @error="handleImageError"
+          @error="(e: Event) => handleImageError(e, DEFAULT_AVATAR)"
         />
       </div>
       <h1 class="name">{{ profile.name }}</h1>
@@ -58,11 +40,11 @@ function getIcon(icon: string | { src: string }): string | IconifyIcon {
           :aria-label="link.title"
           :title="link.title"
         >
-          <Icon :icon="getIcon(link.icon)" aria-hidden="true" />
+          <Icon :icon="resolveIconSrc(link.icon)" aria-hidden="true" />
         </a>
       </nav>
     </div>
-    <div class="description-card">
+    <div class="description-card animate-in animate-in-delay-1">
       <h2>
         <Icon icon="mdi:account-details" class="section-icon" aria-hidden="true" />
         关于我
@@ -257,7 +239,7 @@ function getIcon(icon: string | { src: string }): string | IconifyIcon {
 
   .description {
     flex: none;
-    max-height: 300px;
+    max-height: 400px;
   }
 }
 </style>
