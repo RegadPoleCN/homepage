@@ -14,12 +14,10 @@
   },
   "dependencies": {
     "@iconify/vue": "^5.0.0",
-    "@sentry/tracing": "^7.120.4",
     "@sentry/vue": "^10.45.0",
     "@vueuse/core": "^14.2.1",
     "pinia": "^3.0.4",
-    "vue": "^3.5.30",
-    "web-vitals": "^5.2.0"
+    "vue": "^3.5.30"
   },
   "lint-staged": {
     "*.{vue,js,jsx,cjs,mjs,ts,tsx,mts,cts}": "eslint --fix",
@@ -27,13 +25,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@tailwindcss/postcss": "^4.2.2",
+    "@fontsource/inter": "^5.2.8",
     "@types/node": "^24.12.0",
     "@typescript-eslint/eslint-plugin": "^8.57.1",
     "@typescript-eslint/parser": "^8.57.1",
     "@vitejs/plugin-vue": "^6.0.5",
     "@vue/tsconfig": "^0.8.1",
-    "autoprefixer": "^10.4.27",
     "eslint": "^10.1.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-vue": "^10.8.0",
@@ -41,13 +38,13 @@
     "lint-staged": "^16.4.0",
     "postcss": "^8.5.8",
     "prettier": "^3.8.1",
-    "tailwindcss": "^4.2.2",
     "terser": "^5.46.1",
     "typescript": "~5.9.3",
     "vite": "^7.3.1",
     "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-sitemap": "^0.8.2",
     "vue-eslint-parser": "^10.4.0",
-    "vue-tsc": "^3.2.6"
+    "vue-tsc": "^3.2.6",
+    "web-vitals": "^5.2.0"
   }
 }
