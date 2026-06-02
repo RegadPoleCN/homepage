@@ -74,6 +74,22 @@ body {
   background-repeat: no-repeat;
 }
 
+.left-column,
+.center-column,
+.right-column,
+.app-container {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:root[data-custom-bg='true'] .left-column,
+:root[data-custom-bg='true'] .center-column,
+:root[data-custom-bg='true'] .right-column,
+:root[data-custom-bg='true'] .app-container {
+  backdrop-filter: blur(var(--backdrop-blur, 8px));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur, 8px));
+}
+
 .main-layout,
 .left-column,
 .center-column,
@@ -230,6 +246,33 @@ select:focus-visible {
     border-top: 1px solid rgba(128, 128, 128, 0.15);
     padding-top: 1.5rem;
   }
+}
+
+.right-column .content-card:nth-child(n + 3),
+.left-column .content-card:nth-child(n + 3) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
+}
+
+@media (max-width: 1024px) {
+  .right-column .content-card:nth-child(n + 2),
+  .left-column .content-card:nth-child(n + 2) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 200px;
+  }
+}
+
+.animate-in {
+  will-change: transform, opacity;
+}
+
+.back-to-top-btn,
+.settings-btn {
+  will-change: transform, opacity;
+}
+
+.github-badge {
+  will-change: transform;
 }
 
 @keyframes fadeInUp {

@@ -2,8 +2,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 import ViteSitemap from 'vite-plugin-sitemap';
-import { resolve } from 'path';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync } from 'fs';
+import { resolve, join, extname } from 'path';
 import type {
   RightPanelSection,
   PersonalWebsiteSection,
@@ -61,6 +61,73 @@ function cspPlugin() {
     name: 'csp-plugin',
     transformIndexHtml(html: string) {
       return html.replace('__UPTIME_KUMA_CSP__', getUptimeKumaCspOrigin());
+    },
+  };
+}
+
+function iconBundlePlugin() {
+  const virtualModuleId = 'virtual:icon-bundle';
+  const resolvedId = '\0' + virtualModuleId;
+
+  const walkDir = (dir: string, files: string[] = []): string[] => {
+    const entries = readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory() && entry.name !== 'node_modules' && !entry.name.startsWith('.')) {
+        walkDir(full, files);
+      } else if (entry.isFile() && ['.vue', '.ts', '.json'].includes(extname(entry.name))) {
+        files.push(full);
+      }
+    }
+    return files;
+  };
+
+  return {
+    name: 'icon-bundle',
+    resolveId(id: string) {
+      if (id === virtualModuleId) return resolvedId;
+    },
+    async load(id: string) {
+      if (id !== resolvedId) return;
+
+      const srcDir = resolve(__dirname, 'src');
+      const files = walkDir(srcDir);
+
+      const mdiSet = new Set<string>();
+      const mingcuteSet = new Set<string>();
+      const RE = /icon="(mdi|mingcute):([^"]+)"/g;
+
+      for (const file of files) {
+        const content = readFileSync(file, 'utf-8');
+        for (const [, prefix, name] of content.matchAll(RE)) {
+          (prefix === 'mdi' ? mdiSet : mingcuteSet).add(name);
+        }
+      }
+
+      const { getIcons } = await import('@iconify/utils');
+
+      let code = `import { addCollection } from '@iconify/vue';\n`;
+
+      if (mdiSet.size > 0) {
+        const mdiFull = JSON.parse(
+          readFileSync(resolve(__dirname, 'node_modules/@iconify-json/mdi/icons.json'), 'utf-8')
+        );
+        const filtered = getIcons(mdiFull, [...mdiSet]);
+        if (filtered) code += `addCollection(${JSON.stringify(filtered)});\n`;
+      }
+
+      if (mingcuteSet.size > 0) {
+        const mgFull = JSON.parse(
+          readFileSync(
+            resolve(__dirname, 'node_modules/@iconify-json/mingcute/icons.json'),
+            'utf-8'
+          )
+        );
+        const filtered = getIcons(mgFull, [...mingcuteSet]);
+        if (filtered) code += `addCollection(${JSON.stringify(filtered)});\n`;
+      }
+
+      return code;
     },
   };
 }
@@ -135,6 +202,7 @@ export default defineConfig({
     vue(),
     robotsTxtPlugin(),
     cspPlugin(),
+    iconBundlePlugin(),
     ViteSitemap({
       hostname: domain,
       dynamicRoutes: getDynamicRoutes(),
