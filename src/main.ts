@@ -1,7 +1,8 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/600.css';
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-600.css';
+import 'virtual:icon-bundle';
 import './style.css';
 import App from './App.vue';
 import { initSentry } from '@/utils/sentry';
@@ -11,8 +12,6 @@ import { generateAllStructuredData } from '@/composables/useStructuredData';
 
 const app = createApp(App);
 const pinia = createPinia();
-
-initSentry(app);
 
 const isDev = import.meta.env.DEV;
 
@@ -90,4 +89,9 @@ updateMetaTags();
 injectStructuredData();
 
 app.use(pinia);
+
+if (!isDev && import.meta.env.VITE_SENTRY_DSN) {
+  window.requestIdleCallback ? window.requestIdleCallback(() => initSentry(app)) : initSentry(app);
+}
+
 app.mount('#app');

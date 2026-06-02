@@ -7,7 +7,8 @@ import { loadBusuanzi } from '@/utils/busuanzi';
 const { runtime } = useSiteStats();
 
 onMounted(() => {
-  loadBusuanzi();
+  const load = () => loadBusuanzi();
+  window.requestIdleCallback ? window.requestIdleCallback(load) : setTimeout(load, 1000);
 });
 </script>
 
