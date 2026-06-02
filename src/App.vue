@@ -1,7 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, defineAsyncComponent } from 'vue';
+import { ref, onMounted, onUnmounted, computed, defineAsyncComponent } from 'vue';
 import { Icon } from '@iconify/vue';
-import { useWindowScroll } from '@vueuse/core';
+
+function useScrollY() {
+  const y = ref(window.scrollY);
+  const handler = () => {
+    y.value = window.scrollY;
+  };
+  onMounted(() => window.addEventListener('scroll', handler, { passive: true }));
+  onUnmounted(() => window.removeEventListener('scroll', handler));
+  return y;
+}
 import LeftSidebar from '@/components/LeftSidebar.vue';
 import CenterPanel from '@/components/CenterPanel.vue';
 import RightPanelSkeleton from '@/components/RightPanelSkeleton.vue';
@@ -15,14 +24,13 @@ const RightPanel = defineAsyncComponent({
 const Footer = defineAsyncComponent(() => import('@/components/Footer.vue'));
 
 const SettingsModal = defineAsyncComponent(() => import('@/components/SettingsModal.vue'));
-const GitHubBadge = defineAsyncComponent(() => import('@/components/GitHubBadge.vue'));
 import { useThemeStore } from '@/stores/theme';
 import { useScrollToTop } from '@/composables/useScrollToTop';
 import { useAppScroll } from '@/composables/useAppScroll';
 import { usePerformanceMonitor } from '@/composables/usePerformanceMonitor';
 
 const themeStore = useThemeStore();
-const { y } = useWindowScroll();
+const y = useScrollY();
 const { isLaunching, scrollToTop } = useScrollToTop();
 
 if (import.meta.env.DEV) {
@@ -74,8 +82,6 @@ onMounted(() => {
     >
       <Icon icon="mdi:cog" aria-hidden="true" />
     </button>
-
-    <GitHubBadge />
 
     <main id="main-content" class="main-layout" role="main">
       <aside ref="leftColumnRef" class="left-column" role="complementary" aria-label="左侧边栏">
