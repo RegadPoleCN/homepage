@@ -1,5 +1,7 @@
 :root {
   scroll-behavior: smooth;
+
+  /* === 主题色 === */
   --primary-color: #60a5fa;
   --background-color: #0f172a;
   --text-color: #f1f5f9;
@@ -8,6 +10,22 @@
   --left-bg: #0f172a;
   --center-bg: #1e293b;
   --right-bg: #0f172a;
+
+  /* === 语义化表面/卡片令牌（暗色模式默认值） === */
+  --card-bg: rgba(255, 255, 255, 0.1);
+  --card-border: 1px solid rgba(255, 255, 255, 0.06);
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --card-hover-bg: rgba(255, 255, 255, 0.15);
+  --surface-alpha-light: rgba(128, 128, 128, 0.08);
+  --surface-alpha-medium: rgba(128, 128, 128, 0.15);
+  --surface-alpha-strong: rgba(128, 128, 128, 0.2);
+  --card-transition:
+    background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+
+  /* === 状态色 === */
+  --color-up: #22c55e;
+  --color-down: #ef4444;
+  --color-warn: #f59e0b;
 
   font-family:
     'Inter',
@@ -29,6 +47,7 @@
 }
 
 [data-theme='light'] {
+  /* === 主题色 === */
   --primary-color: #3b82f6;
   --background-color: #f8fafc;
   --text-color: #1e293b;
@@ -37,9 +56,17 @@
   --left-bg: #e2e8f0;
   --center-bg: #ffffff;
   --right-bg: #f1f5f9;
+
+  /* === 语义化表面/卡片令牌 === */
+  --card-bg: var(--card-background);
+  --card-border: 1.5px solid rgba(0, 0, 0, 0.12);
+  --card-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.1), 0 12px 32px rgba(0, 0, 0, 0.12), 0 24px 64px rgba(0, 0, 0, 0.1);
+  --card-hover-bg: rgba(128, 128, 128, 0.15);
 }
 
 [data-theme='warm'] {
+  /* === 主题色 === */
   --primary-color: #f59e0b;
   --background-color: #fffbeb;
   --text-color: #78350f;
@@ -48,6 +75,13 @@
   --left-bg: #fef3c7;
   --center-bg: #fffbeb;
   --right-bg: #fef9c3;
+
+  /* === 语义化表面/卡片令牌 === */
+  --card-bg: var(--card-background);
+  --card-border: 1.5px solid rgba(0, 0, 0, 0.12);
+  --card-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.1), 0 12px 32px rgba(0, 0, 0, 0.12), 0 24px 64px rgba(0, 0, 0, 0.1);
+  --card-hover-bg: rgba(128, 128, 128, 0.15);
 }
 
 *,
@@ -103,6 +137,16 @@ body {
     background-color 0.3s ease,
     border-color 0.3s ease,
     box-shadow 0.3s ease;
+}
+
+/* === Global Animations === */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 a {
@@ -241,10 +285,8 @@ select:focus-visible {
 }
 
 @media (max-width: 1024px) {
-  .left-column,
-  .right-column {
-    border-top: 1px solid rgba(128, 128, 128, 0.15);
-    padding-top: 1.5rem;
+  .main-layout {
+    gap: 24px;
   }
 }
 

@@ -131,7 +131,7 @@ const socialLinks = computed(() => {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(128, 128, 128, 0.15);
+  background: var(--surface-alpha-medium);
   color: var(--text-color);
   font-size: 1.125rem;
   transition: all 0.2s ease;

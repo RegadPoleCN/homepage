@@ -144,15 +144,6 @@ defineProps<{
   }
 }
 
-:global([data-theme='light']) .skeleton {
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.06) 25%,
-    rgba(0, 0, 0, 0.12) 50%,
-    rgba(0, 0, 0, 0.06) 75%
-  );
-}
-
 .skeleton-card-header {
   display: flex;
   align-items: center;

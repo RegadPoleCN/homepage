@@ -171,19 +171,11 @@ function getActivityTime(item: Activity): string {
 }
 
 .content-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   border-radius: 16px;
   padding: 1.5rem;
-}
-
-:global([data-theme='light']) .content-card,
-:global([data-theme='warm']) .content-card {
-  background: var(--card-background);
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.1),
-    0 12px 32px rgba(0, 0, 0, 0.12),
-    0 24px 64px rgba(0, 0, 0, 0.1);
-  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
 }
 
 .card-header {
@@ -223,14 +215,14 @@ function getActivityTime(item: Activity): string {
   gap: 1rem;
   padding: 0.875rem;
   border-radius: 10px;
-  background: rgba(128, 128, 128, 0.08);
+  background: var(--surface-alpha-light);
   text-decoration: none;
   transition: all 0.2s ease;
   min-height: 44px;
 }
 
 .website-item:hover {
-  background: rgba(128, 128, 128, 0.15);
+  background: var(--card-hover-bg);
   transform: translateX(4px);
 }
 
@@ -289,13 +281,13 @@ function getActivityTime(item: Activity): string {
   gap: 1rem;
   padding: 0.875rem;
   border-radius: 10px;
-  background: rgba(128, 128, 128, 0.08);
+  background: var(--surface-alpha-light);
   transition: background 0.2s ease;
   min-height: 44px;
 }
 
 .activity-item:hover {
-  background: rgba(128, 128, 128, 0.15);
+  background: var(--card-hover-bg);
 }
 
 .activity-icon {
@@ -342,7 +334,7 @@ function getActivityTime(item: Activity): string {
   gap: 0.5rem;
   padding: 0.625rem 1.125rem;
   border-radius: 20px;
-  background: rgba(128, 128, 128, 0.1);
+  background: var(--surface-alpha-medium);
   font-size: 0.875rem;
   color: var(--text-color);
   transition: all 0.2s ease;
@@ -368,14 +360,14 @@ function getActivityTime(item: Activity): string {
   gap: 1rem;
   padding: 1rem;
   border-radius: 12px;
-  background: rgba(128, 128, 128, 0.08);
+  background: var(--surface-alpha-light);
   text-decoration: none;
   transition: all 0.2s ease;
   min-height: 44px;
 }
 
 .project-item:hover {
-  background: rgba(128, 128, 128, 0.15);
+  background: var(--card-hover-bg);
   transform: translateX(4px);
 }
 

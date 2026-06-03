@@ -23,18 +23,10 @@ defineProps<{
 }
 
 .skeleton-section {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   border-radius: 16px;
   padding: 1.5rem;
-}
-
-:global([data-theme='light']) .skeleton-section,
-:global([data-theme='warm']) .skeleton-section {
-  background: var(--card-background);
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.1),
-    0 12px 32px rgba(0, 0, 0, 0.12),
-    0 24px 64px rgba(0, 0, 0, 0.1);
-  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
 }
 </style>

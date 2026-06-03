@@ -97,7 +97,7 @@ const friendLinks = siteConfig.friendLinks;
   border-radius: 8px;
   text-decoration: none;
   transition: all 0.2s ease;
-  background: rgba(128, 128, 128, 0.08);
+  background: var(--surface-alpha-light);
   min-height: 44px;
 }
 

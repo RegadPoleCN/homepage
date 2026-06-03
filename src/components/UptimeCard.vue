@@ -244,17 +244,17 @@ const getOverallStatusIcon = () => {
 
 .status-badge.up {
   background: rgba(34, 197, 94, 0.15);
-  color: #22c55e;
+  color: var(--color-up);
 }
 
 .status-badge.partial {
   background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  color: var(--color-warn);
 }
 
 .status-badge.down {
   background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  color: var(--color-down);
 }
 
 .last-updated {
@@ -297,7 +297,7 @@ const getOverallStatusIcon = () => {
 
 .error-icon {
   font-size: 2.5rem;
-  color: #ef4444;
+  color: var(--color-down);
   opacity: 0.8;
 }
 
@@ -357,15 +357,6 @@ const getOverallStatusIcon = () => {
 
 .spin {
   animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .monitor-grid {

@@ -29,20 +29,15 @@ onMounted(() => {
 
 <style scoped>
 .stats-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   width: 100%;
-}
-
-:global([data-theme='light']) .stats-card,
-:global([data-theme='warm']) .stats-card {
-  background: var(--card-background);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
 }
 
 .stats-item {
