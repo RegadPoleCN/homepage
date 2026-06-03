@@ -4,6 +4,8 @@ import { VitePWA } from 'vite-plugin-pwa';
 import ViteSitemap from 'vite-plugin-sitemap';
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { resolve, join, extname } from 'path';
+import type { IncomingMessage, ServerResponse } from 'http';
+import type { ViteDevServer } from 'vite';
 import type {
   RightPanelSection,
   PersonalWebsiteSection,
@@ -133,10 +135,7 @@ function iconBundlePlugin() {
 }
 
 function robotsTxtPlugin() {
-  return {
-    name: 'robots-txt-plugin',
-    writeBundle() {
-      const robotsContent = `# robots.txt for homepage
+  const robotsContent = `# robots.txt for homepage
 # https://www.robotstxt.org/
 # Last updated: ${new Date().toISOString().split('T')[0]}
 
@@ -191,7 +190,79 @@ Disallow: /
 User-agent: MJ12bot
 Disallow: /
 `;
+
+  return {
+    name: 'robots-txt-plugin',
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use('/robots.txt', (_req: IncomingMessage, res: ServerResponse) => {
+        res.setHeader('Content-Type', 'text/plain');
+        res.end(robotsContent);
+      });
+    },
+    writeBundle() {
       writeFileSync(resolve(__dirname, 'dist/robots.txt'), robotsContent);
+    },
+  };
+}
+
+function seoInjectPlugin() {
+  const replaceTemplate = (template: string, profile: typeof siteConfig.profile) =>
+    template
+      .replace(/{name}/g, profile.name)
+      .replace(/{bio}/g, profile.bio)
+      .replace(/{occupation}/g, profile.occupation || '');
+
+  const title = replaceTemplate(siteConfig.site.title || '{name} - 个人主页', siteConfig.profile);
+
+  const parts: string[] = [];
+  if (siteConfig.profile.bio) parts.push(siteConfig.profile.bio);
+  if (siteConfig.profile.description) {
+    if (Array.isArray(siteConfig.profile.description))
+      parts.push(...siteConfig.profile.description);
+    else parts.push(siteConfig.profile.description);
+  }
+  let description = parts.join(' ').replace(/\s+/g, ' ').trim();
+  if (description.length > 160) description = description.slice(0, 157).trim() + '...';
+
+  const keywordsSet = new Set<string>();
+  if (siteConfig.profile.keywords)
+    siteConfig.profile.keywords.forEach((k: string) => keywordsSet.add(k.trim().toLowerCase()));
+  if (siteConfig.profile.name)
+    siteConfig.profile.name.split(/[\s,，]+/).forEach((w: string) => {
+      const c = w.trim().toLowerCase();
+      if (c.length > 1) keywordsSet.add(c);
+    });
+  if (siteConfig.profile.occupation)
+    siteConfig.profile.occupation.split(/[\s,，、]+/).forEach((w: string) => {
+      const c = w.trim().toLowerCase();
+      if (c.length > 1) keywordsSet.add(c);
+    });
+  const skillsSection = siteConfig.rightPanel?.sections?.find(
+    (s: any) => s.type === 'skills' && s.enabled
+  ) as any;
+  if (skillsSection?.items)
+    skillsSection.items.forEach((skill: any) => {
+      const c = skill.name?.trim().toLowerCase();
+      if (c) keywordsSet.add(c);
+    });
+  const keywords = Array.from(keywordsSet).slice(0, 15).join(', ');
+
+  const author = siteConfig.profile.name;
+  const ogImage = siteConfig.seo?.ogImage || siteConfig.profile.avatar;
+  const canonicalUrl = siteConfig.site.domain;
+
+  return {
+    name: 'seo-inject-plugin',
+    transformIndexHtml(html: string) {
+      return html
+        .replace(/__SEO_TITLE__/g, title)
+        .replace(/__SEO_DESCRIPTION__/g, description)
+        .replace(/__SEO_KEYWORDS__/g, keywords)
+        .replace(/__SEO_AUTHOR__/g, author)
+        .replace(/__SEO_OG_IMAGE__/g, ogImage)
+        .replace(/__SEO_TWITTER_IMAGE__/g, ogImage)
+        .replace(/__SEO_CANONICAL__/g, canonicalUrl)
+        .replace(/__SEO_HREFLANG_URL__/g, canonicalUrl);
     },
   };
 }
@@ -200,6 +271,7 @@ export default defineConfig({
   base: './',
   plugins: [
     vue(),
+    seoInjectPlugin(),
     robotsTxtPlugin(),
     cspPlugin(),
     iconBundlePlugin(),
