@@ -1,16 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, defineAsyncComponent } from 'vue';
+import { ref, onMounted, computed, defineAsyncComponent } from 'vue';
 import { Icon } from '@iconify/vue';
-
-function useScrollY() {
-  const y = ref(window.scrollY);
-  const handler = () => {
-    y.value = window.scrollY;
-  };
-  onMounted(() => window.addEventListener('scroll', handler, { passive: true }));
-  onUnmounted(() => window.removeEventListener('scroll', handler));
-  return y;
-}
 import LeftSidebar from '@/components/LeftSidebar.vue';
 import CenterPanel from '@/components/CenterPanel.vue';
 import RightPanelSkeleton from '@/components/RightPanelSkeleton.vue';
@@ -27,6 +17,7 @@ const SettingsModal = defineAsyncComponent(() => import('@/components/SettingsMo
 import { useThemeStore } from '@/stores/theme';
 import { useScrollToTop } from '@/composables/useScrollToTop';
 import { useAppScroll } from '@/composables/useAppScroll';
+import { useScrollY } from '@/composables/useScrollY';
 import { usePerformanceMonitor } from '@/composables/usePerformanceMonitor';
 
 const themeStore = useThemeStore();
