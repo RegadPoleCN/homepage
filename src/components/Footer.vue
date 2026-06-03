@@ -55,7 +55,7 @@ const yearRange = computed(() => {
         </a>
         <a
           v-if="footer.gonganBeian"
-          :href="`http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=${footer.gonganBeianCode}`"
+          :href="`https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=${footer.gonganBeianCode}`"
           target="_blank"
           rel="noopener noreferrer"
           class="beian-link"
