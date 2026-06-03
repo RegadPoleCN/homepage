@@ -59,12 +59,6 @@ const spinnerClass = computed(() => `spinner-${props.size || 'medium'}`);
   animation: spin 0.8s linear infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .loading-text {
   margin: 0;
   font-size: 0.875rem;
