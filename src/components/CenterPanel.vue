@@ -79,6 +79,7 @@ const socialLinks = computed(() => {
   border-radius: 16px;
   padding: 1.25rem;
   text-align: center;
+  flex-shrink: 0;
 }
 
 :global([data-theme='light']) .profile-card,
@@ -122,6 +123,10 @@ const socialLinks = computed(() => {
   display: flex;
   justify-content: center;
   gap: 0.75rem;
+  flex-wrap: wrap;
+  max-height: 80px;
+  overflow-y: auto;
+  padding: 2px 0;
 }
 
 .social-link {
@@ -238,8 +243,8 @@ const socialLinks = computed(() => {
   }
 
   .description {
-    flex: none;
     max-height: 400px;
+    overflow-y: auto;
   }
 }
 </style>
