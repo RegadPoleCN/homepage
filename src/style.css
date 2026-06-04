@@ -288,6 +288,13 @@ select:focus-visible {
   .main-layout {
     gap: 24px;
   }
+
+  .scroll-container,
+  .left-column,
+  .center-column,
+  .right-column {
+    overscroll-behavior: auto;
+  }
 }
 
 .right-column .content-card:nth-child(n + 3),
